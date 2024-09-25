@@ -3,6 +3,11 @@
  *
  * It is extraordinarily rare that you will ever need to edit this file.
  */
+repositories {
+   maven {
+      url = 'https://maven.brott.dev/'
+   }
+}
 
 buildscript {
     repositories {
@@ -12,6 +17,10 @@ buildscript {
     dependencies {
         // Note for FTC Teams: Do not modify this yourself.
         classpath 'com.android.tools.build:gradle:8.2.2'
+        implementation "com.acmerobotics.roadrunner:ftc:0.1.14"
+        implementation "com.acmerobotics.roadrunner:core:1.0.0"
+        implementation "com.acmerobotics.roadrunner:actions:1.0.0"
+        implementation "com.acmerobotics.dashboard:dashboard:0.4.16"
     }
 }
 
