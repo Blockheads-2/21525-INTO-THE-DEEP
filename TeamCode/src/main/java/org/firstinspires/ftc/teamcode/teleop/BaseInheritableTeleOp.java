@@ -58,7 +58,9 @@ public abstract class BaseInheritableTeleOp extends OpMode {
         });
     }
 
-    protected void
+    protected void powerModifier(double power) {
+
+    }
 
     protected void updateTelemetry() {
         for (Runnable implementation : telemetryImplementations) {
