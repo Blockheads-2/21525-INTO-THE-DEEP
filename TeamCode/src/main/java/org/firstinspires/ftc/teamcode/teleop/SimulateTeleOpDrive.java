@@ -7,10 +7,10 @@ public class SimulateTeleOpDrive extends InheritableTeleOp {
 
     @Override
     public void loop() {
-        robot.leftFront.setPower(leftFrontPower);
-        robot.leftBack.setPower(leftBackPower);
-        robot.rightFront.setPower(rightFrontPower);
-        robot.rightBack.setPower(rightBackPower);
+        robot.leftFront.setPower(0.5);
+        robot.leftBack.setPower(0.5);
+        robot.rightFront.setPower(0.5);
+        robot.rightBack.setPower(0.5);
         updateTelemetry();
     }
 }
