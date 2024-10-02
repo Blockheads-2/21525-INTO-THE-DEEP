@@ -38,9 +38,9 @@ public abstract class InheritableTeleOp extends OpMode {
             directionR = Math.pow(gamepad1.right_stick_x, 1);
 
         double leftFrontPower = (directionX + directionY + directionR) * power;
-        double leftBackPower = (-directionX + directionY + directionR) * power;
+        double leftBackPower = -(-directionX + directionY + directionR) * power;
         double rightFrontPower = (-directionX + directionY - directionR) * power;
-        double rightBackPower = (directionX + directionY - directionR) * power;
+        double rightBackPower = -(directionX + directionY - directionR) * power;
 
         robot.leftFront.setPower(leftFrontPower);
         robot.leftBack.setPower(leftBackPower);
