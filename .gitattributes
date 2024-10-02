@@ -1,2 +1,2 @@
-*.bat linguist-detectable
+*.bat linguist-language=Batch
 *.gradle linguist-detectable
