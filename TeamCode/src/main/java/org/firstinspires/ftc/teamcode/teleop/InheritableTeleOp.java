@@ -65,12 +65,6 @@ public abstract class InheritableTeleOp extends OpMode {
         double directionY = 0;
         double directionR = 0;
 
-        if (Math.abs(gamepad1LeftStickX) > 0.25) directionX = Math.pow(gamepad1LeftStickX, 1);
-        if (Math.abs(gamepad1LeftStickY) > 0.25)
-            directionY = -Math.pow(gamepad1LeftStickY, 1);
-        if (Math.abs(gamepad1RightStickX) > 0.25)
-            directionR = Math.pow(gamepad1RightStickX, 1);
-
         double leftFrontPower = (directionX + directionY + directionR) * power;
         double leftBackPower = (-directionX + directionY + directionR) * power;
         double rightFrontPower = (-directionX + directionY - directionR) * power;
