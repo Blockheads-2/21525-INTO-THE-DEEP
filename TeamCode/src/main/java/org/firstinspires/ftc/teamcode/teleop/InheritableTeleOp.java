@@ -23,7 +23,11 @@ public abstract class InheritableTeleOp extends OpMode {
         dashboard = FtcDashboard.getInstance();
         dashboardTelemetry = dashboard.getTelemetry();
 
-        updateTelemetry();
+        dashboardTelemetry.update();
+    }
+
+    public void loop() {
+        dashboardTelemetry.update();
     }
 
     protected void drive(double power) {
@@ -47,18 +51,7 @@ public abstract class InheritableTeleOp extends OpMode {
         robot.rightFront.setPower(rightFrontPower);
         robot.rightBack.setPower(rightBackPower);
 
-        Utility.registerTelemetryImplementation(telemetryImplementations, () -> {
-            dashboardTelemetry.addData("left front power:", leftFrontPower);
-            dashboardTelemetry.addData("left back power:", leftBackPower);
-            dashboardTelemetry.addData("right front power:", rightFrontPower);
-            dashboardTelemetry.addData("right back power:", rightBackPower);
-
-            dashboardTelemetry.addData("left front velocity:", robot.leftFront.getVelocity());
-            dashboardTelemetry.addData("left back velocity:", robot.leftBack.getVelocity());
-            dashboardTelemetry.addData("right front velocity:", robot.rightFront.getVelocity());
-            dashboardTelemetry.addData("right back velocity:", robot.rightBack.getVelocity());
-        });
-    }
+        }
 
     protected void simulateAnalogDrive(double gamepad1LeftStickX, double gamepad1LeftStickY, double gamepad1RightStickX, double power) {
         double directionX = 0;
@@ -74,24 +67,9 @@ public abstract class InheritableTeleOp extends OpMode {
         robot.leftBack.setPower(leftBackPower);
         robot.rightFront.setPower(rightFrontPower);
         robot.rightBack.setPower(rightBackPower);
-
-        Utility.registerTelemetryImplementation(telemetryImplementations, () -> {
-            dashboardTelemetry.addData("left front velocity:", robot.leftFront.getVelocity());
-            dashboardTelemetry.addData("left back velocity:", robot.leftBack.getVelocity());
-            dashboardTelemetry.addData("right front velocity:", robot.rightFront.getVelocity());
-            dashboardTelemetry.addData("right back velocity:", robot.rightBack.getVelocity());
-        });
     }
 
     protected void powerModifier(double power) {
 
-    }
-
-    protected void updateTelemetry() {
-        for (Runnable implementation : telemetryImplementations) {
-            implementation.run();
-        }
-
-        dashboardTelemetry.update();
     }
 }

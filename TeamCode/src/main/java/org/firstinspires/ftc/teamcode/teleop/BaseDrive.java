@@ -13,13 +13,9 @@ public class BaseDrive extends InheritableTeleOp {
     public void loop() {
         drive(1);
 
-        Utility.registerTelemetryImplementation(telemetryImplementations, () -> {
-            dashboardTelemetry.addData("left stick y", gamepad1.left_stick_y);
-            dashboardTelemetry.addData("left stick x", gamepad1.left_stick_x);
-            dashboardTelemetry.addData("right stick x", gamepad1.right_stick_x);
-        });
-
-        updateTelemetry();
-
+        dashboardTelemetry.addData("left front velocity:", robot.leftFront.getVelocity());
+        dashboardTelemetry.addData("left back velocity:", robot.leftBack.getVelocity());
+        dashboardTelemetry.addData("right front velocity:", robot.rightFront.getVelocity());
+        dashboardTelemetry.addData("right back velocity:", robot.rightBack.getVelocity());
     }
 }
