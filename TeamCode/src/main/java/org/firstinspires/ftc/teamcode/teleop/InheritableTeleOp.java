@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.teleop;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.util.Utility;
@@ -15,7 +16,8 @@ public abstract class InheritableTeleOp extends OpMode {
     protected MecanumDrive robot;
     protected FtcDashboard dashboard;
     protected Telemetry dashboardTelemetry;
-    protected List<Runnable> telemetryImplementations = new ArrayList<>();
+
+    protected double drivePower = 0.75;
 
     @Override
     public void init() {
@@ -42,23 +44,6 @@ public abstract class InheritableTeleOp extends OpMode {
             directionR = Math.pow(gamepad1.right_stick_x, 1);
 
         double leftFrontPower = (directionX + directionY + directionR) * power;
-        double leftBackPower = -(-directionX + directionY + directionR) * power;
-        double rightFrontPower = (-directionX + directionY - directionR) * power;
-        double rightBackPower = -(directionX + directionY - directionR) * power;
-
-        robot.leftFront.setPower(leftFrontPower);
-        robot.leftBack.setPower(leftBackPower);
-        robot.rightFront.setPower(rightFrontPower);
-        robot.rightBack.setPower(rightBackPower);
-
-        }
-
-    protected void simulateAnalogDrive(double gamepad1LeftStickX, double gamepad1LeftStickY, double gamepad1RightStickX, double power) {
-        double directionX = 0;
-        double directionY = 0;
-        double directionR = 0;
-
-        double leftFrontPower = (directionX + directionY + directionR) * power;
         double leftBackPower = (-directionX + directionY + directionR) * power;
         double rightFrontPower = (-directionX + directionY - directionR) * power;
         double rightBackPower = (directionX + directionY - directionR) * power;
@@ -69,7 +54,12 @@ public abstract class InheritableTeleOp extends OpMode {
         robot.rightBack.setPower(rightBackPower);
     }
 
-    protected void powerModifier(double power) {
+    protected void powerModifier() {
+        if (gamepad1.right_bumper) drivePower = 0.5;
+        if (gamepad1.right_trigger > 0.25) drivePower = 1;
+    }
 
+    protected void manualServoSet(boolean button, Servo servo, double position) {
+        if (button) servo.setPosition(position);
     }
 }

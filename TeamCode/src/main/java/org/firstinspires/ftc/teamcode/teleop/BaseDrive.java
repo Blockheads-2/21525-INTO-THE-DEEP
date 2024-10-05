@@ -11,7 +11,9 @@ public class BaseDrive extends InheritableTeleOp {
 
     @Override
     public void loop() {
-        drive(1);
+        powerModifier();
+        drive(drivePower);
+        manualServoSet(gamepad1.a, robot.claw, 0.1);
 
         dashboardTelemetry.addData("left front velocity:", robot.leftFront.getVelocity());
         dashboardTelemetry.addData("left back velocity:", robot.leftBack.getVelocity());
