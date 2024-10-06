@@ -55,7 +55,7 @@ public abstract class InheritableTeleOp extends OpMode {
     }
 
     protected void powerModifier() {
-        if (gamepad1.right_bumper) drivePower = 0.5;
+        if (gamepad1.right_bumper) drivePower = 0.25;
         else if (gamepad1.right_trigger > 0.25) drivePower = 1;
         else drivePower = 0.75;
     }
