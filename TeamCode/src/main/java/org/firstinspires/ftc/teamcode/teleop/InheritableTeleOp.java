@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.util.Button;
 import org.firstinspires.ftc.teamcode.util.Utility;
 import org.firstinspires.ftc.teamcode.util.roadrunner.MecanumDrive;
 
@@ -60,7 +61,7 @@ public abstract class InheritableTeleOp extends OpMode {
         else drivePower = 0.75;
     }
 
-    protected void manualServoSet(boolean button, Servo servo, double position) {
-        if (button) servo.setPosition(position);
+    protected void manualServoSet(Button button, Servo servo, double position) {
+        if (button.is(Button.States.TAP)) servo.setPosition(position);
     }
 }
