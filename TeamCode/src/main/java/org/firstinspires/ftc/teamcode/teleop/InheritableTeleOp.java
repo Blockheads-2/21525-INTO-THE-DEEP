@@ -77,6 +77,35 @@ public abstract class InheritableTeleOp extends OpMode {
         robot.rightBack.setPower(rightBackPower);
     }
 
+    protected void fieldCentricDrive(double power) {
+        double heading = robot.lazyImu.get().getRobotYawPitchRollAngles().getYaw();
+
+        double directionX = 0;
+        double directionY = 0;
+        double directionR = 0;
+
+        if (Math.abs(gamepad1.left_stick_x) > 0.25) directionX = Math.pow(gamepad1.left_stick_x, 1);
+        if (Math.abs(gamepad1.left_stick_y) > 0.25)
+            directionY = -Math.pow(gamepad1.left_stick_y, 1);
+        if (Math.abs(gamepad1.right_stick_x) > 0.25)
+            directionR = Math.pow(gamepad1.right_stick_x, 1);
+
+        double rotationalX = directionX * Math.cos(-heading) - directionY * Math.sin(-heading);
+        double rotationalY = directionX * Math.cos(-heading) + directionY * Math.sin(-heading);
+
+        rotationalX *= 1.1;
+
+        double leftFrontPower = (rotationalX + rotationalY + directionR) * power;
+        double leftBackPower = (-rotationalX + rotationalY + directionR) * power;
+        double rightFrontPower = (-rotationalX + rotationalY - directionR) * power;
+        double rightBackPower = (rotationalX + rotationalY - directionR) * power;
+
+        robot.leftFront.setPower(leftFrontPower);
+        robot.leftBack.setPower(leftBackPower);
+        robot.rightFront.setPower(rightFrontPower);
+        robot.rightBack.setPower(rightBackPower);
+    }
+
     protected void powerModifier() {
         if (gamepad1.right_bumper) drivePower = 0.25;
         else if (gamepad1.right_trigger > 0.25) drivePower = 1;
