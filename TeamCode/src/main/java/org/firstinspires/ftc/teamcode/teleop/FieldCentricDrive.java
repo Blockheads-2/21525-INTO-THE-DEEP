@@ -2,12 +2,11 @@ package org.firstinspires.ftc.teamcode.teleop;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-@TeleOp(name="Octo Directional Drive", group="beta")
-public class OctoDirectionalDrive extends InheritableTeleOp {
-    @Override
+@TeleOp(name="Field Centric Drive", group="beta")
+public class FieldCentricDrive extends InheritableTeleOp {
     public void loop() {
         powerModifier();
-        octoDirectionalDrive(drivePower);
+        drive(drivePower);
 
         dashboardTelemetry.addData("left front velocity:", robot.leftFront.getVelocity());
         dashboardTelemetry.addData("left back velocity:", robot.leftBack.getVelocity());
@@ -17,4 +16,3 @@ public class OctoDirectionalDrive extends InheritableTeleOp {
         dashboardTelemetry.update();
     }
 }
-
