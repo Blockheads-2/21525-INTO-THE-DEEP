@@ -86,4 +86,8 @@ public abstract class InheritableTeleOp extends OpMode {
     protected void manualServoSet(Button button, Servo servo, double position) {
         if (button.is(Button.States.TAP)) servo.setPosition(position);
     }
+
+    protected void manualServoSet(Servo servo, double position) {
+        servo.setPosition(position);
+    }
 }
