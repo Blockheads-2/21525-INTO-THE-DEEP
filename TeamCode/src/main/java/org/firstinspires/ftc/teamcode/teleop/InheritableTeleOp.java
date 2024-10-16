@@ -7,11 +7,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.util.Button;
-import org.firstinspires.ftc.teamcode.util.Utility;
 import org.firstinspires.ftc.teamcode.util.roadrunner.MecanumDrive;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public abstract class InheritableTeleOp extends OpMode {
     protected MecanumDrive robot;
@@ -61,12 +57,9 @@ public abstract class InheritableTeleOp extends OpMode {
         double directionR = 0;
 
         if (Math.sqrt(gamepad1.left_stick_x * gamepad1.left_stick_x + gamepad1.left_stick_y * gamepad1.left_stick_y) > 0.25) {
-            double angle = Math.atan2(gamepad1.left_stick_y, gamepad1.left_stick_x);  // Get angle in radians
 
-            // Convert angle to one of 8 directions (quantized to 45-degree intervals)
-            double directionAngle = Math.round(angle / (Math.PI / 4)) * (Math.PI / 4);
+            double directionAngle = Math.round(Math.atan2(gamepad1.left_stick_y, gamepad1.left_stick_x) / (Math.PI / 4)) * (Math.PI / 4);
 
-            // Convert back to X and Y components
             directionX = Math.cos(directionAngle);
             directionY = Math.sin(directionAngle);
         }
