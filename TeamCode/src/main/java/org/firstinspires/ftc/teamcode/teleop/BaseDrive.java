@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.util.Button;
 
 
-@TeleOp(name="Base Drive", group="beta")
+@TeleOp(name="Base Drive")
 public class BaseDrive extends InheritableTeleOp {
     private final Button a = new Button();
 
@@ -23,5 +23,12 @@ public class BaseDrive extends InheritableTeleOp {
         dashboardTelemetry.addData("right back velocity:", robot.rightBack.getVelocity());
 
         dashboardTelemetry.update();
+    }
+
+    @Override
+    public void stop() {
+        manualServoSet(robot.claw, 0);
+
+        super.stop();
     }
 }
