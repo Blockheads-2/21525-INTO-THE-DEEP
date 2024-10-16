@@ -55,6 +55,35 @@ public abstract class InheritableTeleOp extends OpMode {
         robot.rightBack.setPower(rightBackPower);
     }
 
+    protected void octoDirectionalDrive(double power) {
+        double directionX = 0;
+        double directionY = 0;
+        double directionR = 0;
+
+        if (Math.sqrt(gamepad1.left_stick_x * gamepad1.left_stick_x + gamepad1.left_stick_y * gamepad1.left_stick_y) > 0.25) {
+            double angle = Math.atan2(gamepad1.left_stick_y, gamepad1.left_stick_x);  // Get angle in radians
+
+            // Convert angle to one of 8 directions (quantized to 45-degree intervals)
+            double directionAngle = Math.round(angle / (Math.PI / 4)) * (Math.PI / 4);
+
+            // Convert back to X and Y components
+            directionX = Math.cos(directionAngle);
+            directionY = Math.sin(directionAngle);
+        }
+        if (Math.abs(gamepad1.right_stick_x) > 0.25)
+            directionR = Math.pow(gamepad1.right_stick_x, 1);
+
+        double leftFrontPower = (directionX + directionY + directionR) * power;
+        double leftBackPower = (-directionX + directionY + directionR) * power;
+        double rightFrontPower = (-directionX + directionY - directionR) * power;
+        double rightBackPower = (directionX + directionY - directionR) * power;
+
+        robot.leftFront.setPower(leftFrontPower);
+        robot.leftBack.setPower(leftBackPower);
+        robot.rightFront.setPower(rightFrontPower);
+        robot.rightBack.setPower(rightBackPower);
+    }
+
     protected void powerModifier() {
         if (gamepad1.right_bumper) drivePower = 0.25;
         else if (gamepad1.right_trigger > 0.25) drivePower = 1;
