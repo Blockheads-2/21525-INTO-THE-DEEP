@@ -58,7 +58,7 @@ public abstract class InheritableTeleOp extends OpMode {
 
         if (Math.sqrt(gamepad1.left_stick_x * gamepad1.left_stick_x + gamepad1.left_stick_y * gamepad1.left_stick_y) > 0.25) {
 
-            double directionAngle = Math.round(Math.atan2(gamepad1.left_stick_y, gamepad1.left_stick_x) / (Math.PI / 4)) * (Math.PI / 4);
+            double directionAngle = Math.round(Math.atan2(-gamepad1.left_stick_y, gamepad1.left_stick_x) / (Math.PI / 4)) * (Math.PI / 4);
 
             directionX = Math.cos(directionAngle);
             directionY = Math.sin(directionAngle);

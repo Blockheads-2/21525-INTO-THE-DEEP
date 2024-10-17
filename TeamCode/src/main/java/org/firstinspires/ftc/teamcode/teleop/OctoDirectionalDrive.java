@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.teleop;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-@TeleOp(name="Octo Directional Drive", group="beta")
+@TeleOp(name="Octo Directional Drive")
 public class OctoDirectionalDrive extends InheritableTeleOp {
     @Override
     public void loop() {
