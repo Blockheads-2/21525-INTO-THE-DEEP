@@ -13,6 +13,14 @@ public abstract class InheritableTeleOp extends OpMode {
     protected MecanumDrive robot;
     protected FtcDashboard dashboard;
     protected Telemetry dashboardTelemetry;
+    protected CLAW_STATES clawState = CLAW_STATES.CLOSED;
+
+    protected final Button a = new Button();
+
+    protected enum CLAW_STATES {
+        OPEN,
+        CLOSED
+    }
 
     protected double drivePower = 0.75;
 
@@ -110,6 +118,23 @@ public abstract class InheritableTeleOp extends OpMode {
         if (gamepad1.right_bumper) drivePower = 0.25;
         else if (gamepad1.right_trigger > 0.25) drivePower = 1;
         else drivePower = 0.75;
+    }
+
+    protected void claw() {
+        if (a.getState() == Button.States.TAP) {
+            if (clawState == CLAW_STATES.CLOSED) {
+                clawState = CLAW_STATES.OPEN;
+                robot.claw.setPosition(0.05);
+            }
+            if (clawState == CLAW_STATES.OPEN) {
+                clawState = CLAW_STATES.CLOSED;
+                robot.claw.setPosition(0);
+            }
+        }
+    }
+
+    protected void updateButtons() {
+        a.update(gamepad1.a);
     }
 
     protected void manualServoSet(Button button, Servo servo, double position) {
