@@ -15,7 +15,7 @@ public class BaseDrive extends InheritableTeleOp {
         a.update(gamepad1.a);
         powerModifier();
         drive(drivePower);
-        manualServoSet(a, robot.claw, 0.1);
+//        manualServoSet(a, robot.claw, 0.1);
 
         dashboardTelemetry.addData("left front velocity:", robot.leftFront.getVelocity());
         dashboardTelemetry.addData("left back velocity:", robot.leftBack.getVelocity());
@@ -27,7 +27,7 @@ public class BaseDrive extends InheritableTeleOp {
 
     @Override
     public void stop() {
-        manualServoSet(robot.claw, 0);
+//        manualServoSet(robot.claw, 0);
 
         super.stop();
     }

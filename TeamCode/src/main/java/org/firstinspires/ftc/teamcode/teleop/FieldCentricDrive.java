@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 public class FieldCentricDrive extends InheritableTeleOp {
     public void loop() {
         powerModifier();
-        drive(drivePower);
+        fieldCentricDrive(drivePower);
 
         dashboardTelemetry.addData("left front velocity:", robot.leftFront.getVelocity());
         dashboardTelemetry.addData("left back velocity:", robot.leftBack.getVelocity());

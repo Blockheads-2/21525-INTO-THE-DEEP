@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.util.Button;
 
 
-@TeleOp(name="Base Drive", group="beta")
+@TeleOp(name="Child Drive")
 public class ChildDrive extends InheritableTeleOp {
 
     @Override
