@@ -4,6 +4,7 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.util.Button;
@@ -14,7 +15,7 @@ public abstract class InheritableTeleOp extends OpMode {
     protected FtcDashboard dashboard;
     protected Telemetry dashboardTelemetry;
     protected CLAW_STATES clawState = CLAW_STATES.CLOSED;
-
+    protected ElapsedTime time = new ElapsedTime();
     protected final Button a = new Button();
 
     protected enum CLAW_STATES {
@@ -146,7 +147,10 @@ public abstract class InheritableTeleOp extends OpMode {
     }
     protected void lift() {
         double liftPower = Math.pow(gamepad1.right_stick_y, 1);
-        robot.outtakeSlide.setPower(liftPower);
+        robot.outtakeSlide.setPower(-3 * (Math.abs(liftPower)/4));
 
+        if (robot.outtakeSlide.getCurrentPosition() < 0 && gamepad1.right_stick_y == 0) {
+            robot.outtakeSlide.setPower(0.4);
+        }
     }
 }
