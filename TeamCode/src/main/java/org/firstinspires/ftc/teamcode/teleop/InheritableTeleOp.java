@@ -120,22 +120,22 @@ public abstract class InheritableTeleOp extends OpMode {
         else drivePower = 0.75;
     }
 
-    protected void claw() {
-        if (a.getState() == Button.States.TAP) {
-            if (clawState == CLAW_STATES.CLOSED) {
-                clawState = CLAW_STATES.OPEN;
-                robot.claw.setPosition(0.05);
-            }
-            if (clawState == CLAW_STATES.OPEN) {
-                clawState = CLAW_STATES.CLOSED;
-                robot.claw.setPosition(0);
-            }
-        }
-    }
+//    protected void claw() {
+//        if (a.getState() == Button.States.TAP) {
+//            if (clawState == CLAW_STATES.CLOSED) {
+//                clawState = CLAW_STATES.OPEN;
+//                robot.claw.setPosition(0.05);
+//            }
+//            if (clawState == CLAW_STATES.OPEN) {
+//                clawState = CLAW_STATES.CLOSED;
+//                robot.claw.setPosition(0);
+//            }
+//        }
+//    }
 
-    protected void updateButtons() {
-        a.update(gamepad1.a);
-    }
+//    protected void updateButtons() {
+//        a.update(gamepad1.a);
+//    }
 
     protected void manualServoSet(Button button, Servo servo, double position) {
         if (button.is(Button.States.TAP)) servo.setPosition(position);
@@ -143,5 +143,10 @@ public abstract class InheritableTeleOp extends OpMode {
 
     protected void manualServoSet(Servo servo, double position) {
         servo.setPosition(position);
+    }
+    protected void lift() {
+        double liftPower = Math.pow(gamepad1.right_stick_y, 1);
+        robot.outtakeSlide.setPower(liftPower);
+
     }
 }

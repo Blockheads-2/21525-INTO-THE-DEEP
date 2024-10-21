@@ -11,19 +11,22 @@ public class BaseDrive extends InheritableTeleOp {
 
     @Override
     public void loop() {
-        updateButtons();
+//        updateButtons();
         powerModifier();
-        claw();
+//        claw();
         drive(drivePower);
+        lift();
 
         dashboardTelemetry.addData("left front velocity:", robot.leftFront.getVelocity());
         dashboardTelemetry.addData("left back velocity:", robot.leftBack.getVelocity());
         dashboardTelemetry.addData("right front velocity:", robot.rightFront.getVelocity());
         dashboardTelemetry.addData("right back velocity:", robot.rightBack.getVelocity());
+        dashboardTelemetry.addData("lift velocity:", robot.outtakeSlide.getVelocity());
 
-        telemetry.addData("button state:", clawState);
-        telemetry.addData("butyon:", a.getState());
-        telemetry.update();
+        dashboardTelemetry.update();
+//        telemetry.addData("button state:", clawState);
+//        telemetry.addData("button:", a.getState());
+//        telemetry.update();
     }
 
     @Override
