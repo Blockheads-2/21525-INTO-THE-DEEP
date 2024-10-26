@@ -144,41 +144,40 @@ public abstract class InheritableTeleOp extends OpMode {
     }
 
     protected void claw() {
-//        if (a.is(Button.States.TAP)) {
-//            tappedTime = time.milliseconds();
-//
-//            if (clawState == CLAW_STATES.CLOSED) {
-//                robot.claw.setDirection(CRServo.Direction.FORWARD);
-//                clawState = CLAW_STATES.OPEN;
-//                while (tappedTime )
-//                robot.claw.
-//            } else if (clawState == CLAW_STATES.OPEN) {
-//                robot.claw.setDirection(Servo.Direction.REVERSE);
-//                robot.claw.setPosition(0);
-//                clawState = CLAW_STATES.CLOSED;
-//            }
-//        }
-//
-//        telemetry.addData("thing", clawState);
-//        telemetry.update();
+        if (a.is(Button.States.TAP)) {
+            if (clawState == CLAW_STATES.CLOSED) {
+                robot.claw.setDirection(Servo.Direction.REVERSE);
+                robot.claw.setPosition(0.2);
+                clawState = CLAW_STATES.OPEN;
+            } else if (clawState == CLAW_STATES.OPEN) {
+                robot.claw.setDirection(Servo.Direction.FORWARD);
+                robot.claw.setPosition(0);
+                clawState = CLAW_STATES.CLOSED;
+            }
+        }
+
+        telemetry.addData("thing", clawState);
+        telemetry.update();
     }
 
     protected void clawAxial() {
         if (x.is(Button.States.TAP)) {
             if (clawAxialState == CLAW_AXIAL_STATES.REST) {
-                robot.clawAxial.setDirection(Servo.Direction.FORWARD);
-                robot.clawAxial.setPosition(0.6);
+                robot.clawAxial.setDirection(Servo.Direction.REVERSE);
+                robot.clawAxial.setPosition(1);
                 clawAxialState = CLAW_AXIAL_STATES.REVERSE;
             } else if (clawAxialState == CLAW_AXIAL_STATES.REVERSE) {
-                robot.clawAxial.setDirection(Servo.Direction.FORWARD);
-                robot.clawAxial.setPosition(0.9);
+                robot.clawAxial.setDirection(Servo.Direction.REVERSE);
+                robot.clawAxial.setPosition(1);
                 clawAxialState = CLAW_AXIAL_STATES.DOWN;
             } else if (clawAxialState == CLAW_AXIAL_STATES.DOWN) {
-                robot.clawAxial.setDirection(Servo.Direction.REVERSE);
+                robot.clawAxial.setDirection(Servo.Direction.FORWARD);
                 robot.clawAxial.setPosition(0);
                 clawAxialState = CLAW_AXIAL_STATES.REST;
             }
         }
+
+        telemetry.addData("pos", clawAxialState);
     }
 
 

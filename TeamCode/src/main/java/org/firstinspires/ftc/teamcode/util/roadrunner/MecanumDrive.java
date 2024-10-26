@@ -78,8 +78,7 @@ public final class MecanumDrive {
     public final DcMotorEx leftFront, leftBack, rightBack, rightFront;
     public final VoltageSensor voltageSensor;
     public final DcMotorEx outtakeSlide;
-    public final CRServo claw;
-    public final Servo clawAxial;
+    public final Servo claw, clawAxial;
     public final LazyImu lazyImu;
     public final Localizer localizer;
     private final LinkedList<Pose2d> poseHistory = new LinkedList<>();
@@ -115,7 +114,7 @@ public final class MecanumDrive {
         leftBack.setDirection(DcMotorSimple.Direction.REVERSE);
 
 
-        claw = hardwareMap.get(CRServo.class, "claw");
+        claw = hardwareMap.get(Servo.class, "claw");
         clawAxial = hardwareMap.get(Servo.class, "clawAxial");
 
 
