@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.teleop;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -155,9 +156,17 @@ public abstract class InheritableTeleOp extends OpMode {
         servo.setPosition(position);
     }
     protected void lift() {
-        if (gamepad1.right_stick_y > 0) {
+        if (gamepad1.right_stick_y < 0) {
             if (liftState == LIFT_STATES.BOTTOM) {
                 robot.outtakeSlide.setTargetPosition((int) Constants.Lift.HALF_HEIGHT);
+                robot.outtakeSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                robot.outtakeSlide.setPower(0.75);
+                liftState = LIFT_STATES.MIDDLE;
+            }
+        }
+        if (gamepad1.right_stick_y > 0) {
+            if (liftState == LIFT_STATES.MIDDLE) {
+
             }
         }
     }
