@@ -41,6 +41,7 @@ import com.acmerobotics.roadrunner.ftc.PositionVelocityPair;
 import com.acmerobotics.roadrunner.ftc.RawEncoder;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -77,7 +78,8 @@ public final class MecanumDrive {
     public final DcMotorEx leftFront, leftBack, rightBack, rightFront;
     public final VoltageSensor voltageSensor;
     public final DcMotorEx outtakeSlide;
-//    public final Servo claw, clawAxial;
+    public final CRServo claw;
+    public final Servo clawAxial;
     public final LazyImu lazyImu;
     public final Localizer localizer;
     private final LinkedList<Pose2d> poseHistory = new LinkedList<>();
@@ -113,8 +115,8 @@ public final class MecanumDrive {
         leftBack.setDirection(DcMotorSimple.Direction.REVERSE);
 
 
-//        claw = hardwareMap.get(Servo.class, "claw");
-//        clawAxial = hardwareMap.get(Servo.class, "clawAxial");
+        claw = hardwareMap.get(CRServo.class, "claw");
+        clawAxial = hardwareMap.get(Servo.class, "clawAxial");
 
 
         //   see https://ftc-docs.firstinspires.org/en/latest/hardware_and_software_configuration/configuring/index.html

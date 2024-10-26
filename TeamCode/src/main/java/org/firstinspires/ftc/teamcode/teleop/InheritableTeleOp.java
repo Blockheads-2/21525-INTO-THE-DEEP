@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.teleop;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -16,16 +17,26 @@ public abstract class InheritableTeleOp extends OpMode {
     protected MecanumDrive robot;
     protected FtcDashboard dashboard;
     protected Telemetry dashboardTelemetry;
-    protected CLAW_STATES clawState = CLAW_STATES.CLOSED;
-
-    protected LIFT_STATES liftState = LIFT_STATES.BOTTOM;
+    private CLAW_STATES clawState = CLAW_STATES.CLOSED;
+    private CLAW_AXIAL_STATES clawAxialState = CLAW_AXIAL_STATES.REST;
+    private LIFT_STATES liftState = LIFT_STATES.BOTTOM;
     protected ElapsedTime time = new ElapsedTime();
     protected final Button rightStickUp = new Button();
     protected final Button rightStickDown = new Button();
+    protected final Button a = new Button();
+    protected final Button x = new Button();
+
+    private double tappedTime = 0;
 
     protected enum CLAW_STATES {
         OPEN,
         CLOSED
+    }
+
+    protected enum CLAW_AXIAL_STATES {
+        REST,
+        REVERSE,
+        DOWN
     }
 
     protected enum LIFT_STATES {
@@ -132,22 +143,49 @@ public abstract class InheritableTeleOp extends OpMode {
         else drivePower = 0.75;
     }
 
-//    protected void claw() {
-//        if (a.getState() == Button.States.TAP) {
+    protected void claw() {
+//        if (a.is(Button.States.TAP)) {
+//            tappedTime = time.milliseconds();
+//
 //            if (clawState == CLAW_STATES.CLOSED) {
+//                robot.claw.setDirection(CRServo.Direction.FORWARD);
 //                clawState = CLAW_STATES.OPEN;
-//                robot.claw.setPosition(0.05);
-//            }
-//            if (clawState == CLAW_STATES.OPEN) {
-//                clawState = CLAW_STATES.CLOSED;
+//                while (tappedTime )
+//                robot.claw.
+//            } else if (clawState == CLAW_STATES.OPEN) {
+//                robot.claw.setDirection(Servo.Direction.REVERSE);
 //                robot.claw.setPosition(0);
+//                clawState = CLAW_STATES.CLOSED;
 //            }
 //        }
-//    }
+//
+//        telemetry.addData("thing", clawState);
+//        telemetry.update();
+    }
+
+    protected void clawAxial() {
+        if (x.is(Button.States.TAP)) {
+            if (clawAxialState == CLAW_AXIAL_STATES.REST) {
+                robot.clawAxial.setDirection(Servo.Direction.FORWARD);
+                robot.clawAxial.setPosition(0.6);
+                clawAxialState = CLAW_AXIAL_STATES.REVERSE;
+            } else if (clawAxialState == CLAW_AXIAL_STATES.REVERSE) {
+                robot.clawAxial.setPosition(0.75);
+                clawAxialState = CLAW_AXIAL_STATES.DOWN;
+            } else if (clawAxialState == CLAW_AXIAL_STATES.DOWN) {
+                robot.clawAxial.setDirection(Servo.Direction.REVERSE);
+                robot.clawAxial.setPosition(0);
+                clawAxialState = CLAW_AXIAL_STATES.REST;
+            }
+        }
+    }
+
 
     protected void updateButtons() {
         rightStickDown.update(gamepad1.right_stick_y > 0);
         rightStickUp.update(gamepad1.right_stick_y < 0);
+        a.update(gamepad1.a);
+        x.update(gamepad1.x);
     }
 
     protected void manualServoSet(Button button, Servo servo, double position) {
@@ -186,8 +224,5 @@ public abstract class InheritableTeleOp extends OpMode {
                 liftState = LIFT_STATES.MIDDLE;
             }
         }
-
-        telemetry.addData("position", liftState);
-        telemetry.update();
     }
 }
