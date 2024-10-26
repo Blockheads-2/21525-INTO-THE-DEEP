@@ -15,12 +15,20 @@ public abstract class InheritableTeleOp extends OpMode {
     protected FtcDashboard dashboard;
     protected Telemetry dashboardTelemetry;
     protected CLAW_STATES clawState = CLAW_STATES.CLOSED;
+
+    protected LIFT_STATES liftState = LIFT_STATES.BOTTOM;
     protected ElapsedTime time = new ElapsedTime();
     protected final Button a = new Button();
 
     protected enum CLAW_STATES {
         OPEN,
         CLOSED
+    }
+
+    protected enum LIFT_STATES {
+        BOTTOM,
+        MIDDLE,
+        TOP
     }
 
     protected double drivePower = 0.75;
@@ -134,9 +142,9 @@ public abstract class InheritableTeleOp extends OpMode {
 //        }
 //    }
 
-//    protected void updateButtons() {
-//        a.update(gamepad1.a);
-//    }
+    protected void updateButtons() {
+        a.update(gamepad1.a);
+    }
 
     protected void manualServoSet(Button button, Servo servo, double position) {
         if (button.is(Button.States.TAP)) servo.setPosition(position);
@@ -146,11 +154,10 @@ public abstract class InheritableTeleOp extends OpMode {
         servo.setPosition(position);
     }
     protected void lift() {
-        double liftPower = Math.pow(gamepad1.right_stick_y, 1);
-        robot.outtakeSlide.setPower(-3 * (Math.abs(liftPower)/4));
-
-        if (robot.outtakeSlide.getCurrentPosition() < 0 && gamepad1.right_stick_y == 0) {
-            robot.outtakeSlide.setPower(0.4);
+        if (gamepad1.right_stick_y > 0) {
+            if (liftState == LIFT_STATES.BOTTOM) {
+                robot.outtakeSlide.setTargetPosition()
+            }
         }
     }
 }
