@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.util.Button;
+import org.firstinspires.ftc.teamcode.util.Constants;
 import org.firstinspires.ftc.teamcode.util.roadrunner.MecanumDrive;
 
 public abstract class InheritableTeleOp extends OpMode {
@@ -156,7 +157,7 @@ public abstract class InheritableTeleOp extends OpMode {
     protected void lift() {
         if (gamepad1.right_stick_y > 0) {
             if (liftState == LIFT_STATES.BOTTOM) {
-                robot.outtakeSlide.setTargetPosition()
+                robot.outtakeSlide.setTargetPosition((int) Constants.Lift.HALF_HEIGHT);
             }
         }
     }

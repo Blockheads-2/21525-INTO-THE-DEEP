@@ -5,8 +5,7 @@ public class Constants {
     /** MILLIMETERS */
     public static double SPOOL_CIRCUMFERENCE = 112;
     public static double COUNTS_PER_REVOLUTION = 537.7;
-    public static double NECESSARY_REVOLUTIONS = 2.0625;
-    public static double COMPLETE_REVOLUTION_COUNTS = 1109.00625;
+
 
     public static class Lift {
         public static double Kp = 0;
@@ -15,6 +14,9 @@ public class Constants {
 
         /** MILLIMETERS */
         public static double STRING_LENGTH = 231.0;
+        public static double NECESSARY_REVOLUTIONS = 2.0625;
+        public static double COMPLETE_REVOLUTION_COUNTS = 1109.00625;
 
+        public static double HALF_HEIGHT = 554.503125;
     }
 }
