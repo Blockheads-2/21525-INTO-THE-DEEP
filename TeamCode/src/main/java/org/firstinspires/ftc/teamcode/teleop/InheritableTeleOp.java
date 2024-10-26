@@ -170,7 +170,8 @@ public abstract class InheritableTeleOp extends OpMode {
                 robot.clawAxial.setPosition(0.6);
                 clawAxialState = CLAW_AXIAL_STATES.REVERSE;
             } else if (clawAxialState == CLAW_AXIAL_STATES.REVERSE) {
-                robot.clawAxial.setPosition(0.75);
+                robot.clawAxial.setDirection(Servo.Direction.FORWARD);
+                robot.clawAxial.setPosition(0.9);
                 clawAxialState = CLAW_AXIAL_STATES.DOWN;
             } else if (clawAxialState == CLAW_AXIAL_STATES.DOWN) {
                 robot.clawAxial.setDirection(Servo.Direction.REVERSE);
