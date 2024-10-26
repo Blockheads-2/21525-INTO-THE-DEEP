@@ -20,7 +20,8 @@ public abstract class InheritableTeleOp extends OpMode {
 
     protected LIFT_STATES liftState = LIFT_STATES.BOTTOM;
     protected ElapsedTime time = new ElapsedTime();
-    protected final Button a = new Button();
+    protected final Button rightStickUp = new Button();
+    protected final Button rightStickDown = new Button();
 
     protected enum CLAW_STATES {
         OPEN,
@@ -145,7 +146,8 @@ public abstract class InheritableTeleOp extends OpMode {
 //    }
 
     protected void updateButtons() {
-        a.update(gamepad1.a);
+        rightStickDown.update(gamepad1.right_stick_y > 0);
+        rightStickUp.update(gamepad1.right_stick_y < 0);
     }
 
     protected void manualServoSet(Button button, Servo servo, double position) {
@@ -156,18 +158,36 @@ public abstract class InheritableTeleOp extends OpMode {
         servo.setPosition(position);
     }
     protected void lift() {
-        if (gamepad1.right_stick_y < 0) {
+        if (rightStickUp.is(Button.States.TAP)) {
+            if (liftState == LIFT_STATES.MIDDLE) {
+                robot.outtakeSlide.setTargetPosition((int) Constants.Lift.TOP);
+                robot.outtakeSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                robot.outtakeSlide.setPower(0.75);
+                liftState = LIFT_STATES.TOP;
+            }
             if (liftState == LIFT_STATES.BOTTOM) {
-                robot.outtakeSlide.setTargetPosition((int) Constants.Lift.HALF_HEIGHT);
+                robot.outtakeSlide.setTargetPosition((int) Constants.Lift.MIDDLE);
                 robot.outtakeSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 robot.outtakeSlide.setPower(0.75);
                 liftState = LIFT_STATES.MIDDLE;
             }
         }
-        if (gamepad1.right_stick_y > 0) {
+        if (rightStickDown.is(Button.States.TAP)) {
             if (liftState == LIFT_STATES.MIDDLE) {
-
+                robot.outtakeSlide.setTargetPosition((int) Constants.Lift.BOTTOM);
+                robot.outtakeSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                robot.outtakeSlide.setPower(0.25);
+                liftState = LIFT_STATES.BOTTOM;
+            }
+            if (liftState == LIFT_STATES.TOP) {
+                robot.outtakeSlide.setTargetPosition((int) Constants.Lift.MIDDLE);
+                robot.outtakeSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                robot.outtakeSlide.setPower(0.25);
+                liftState = LIFT_STATES.MIDDLE;
             }
         }
+
+        telemetry.addData("position", liftState);
+        telemetry.update();
     }
 }

@@ -17,8 +17,8 @@ public class Constants {
         public static double NECESSARY_REVOLUTIONS = 2.0625;
         public static double COMPLETE_REVOLUTION_COUNTS = 1109.00625;
 
+        public static double TOP = 900;
         public static double MIDDLE = 554.503125;
-        public static double BOTTOM = 10;
-        public
+        public static double BOTTOM = 50;
     }
 }
