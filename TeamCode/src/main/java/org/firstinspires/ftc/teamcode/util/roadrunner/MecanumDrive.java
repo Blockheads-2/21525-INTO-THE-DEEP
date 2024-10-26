@@ -78,7 +78,8 @@ public final class MecanumDrive {
     public final DcMotorEx leftFront, leftBack, rightBack, rightFront;
     public final VoltageSensor voltageSensor;
     public final DcMotorEx outtakeSlide;
-    public final Servo claw, clawAxial;
+    public final Servo claw;
+    public final CRServo clawAxial;
     public final LazyImu lazyImu;
     public final Localizer localizer;
     private final LinkedList<Pose2d> poseHistory = new LinkedList<>();
@@ -115,7 +116,7 @@ public final class MecanumDrive {
 
 
         claw = hardwareMap.get(Servo.class, "claw");
-        clawAxial = hardwareMap.get(Servo.class, "clawAxial");
+        clawAxial = hardwareMap.get(CRServo.class, "clawAxial");
 
 
         //   see https://ftc-docs.firstinspires.org/en/latest/hardware_and_software_configuration/configuring/index.html

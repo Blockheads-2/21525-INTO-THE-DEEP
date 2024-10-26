@@ -19,6 +19,7 @@ public class Constants {
 
         public static double TOP = 900;
         public static double MIDDLE = 554.503125;
+        public static double LOW = 100;
         public static double BOTTOM = 50;
     }
 }

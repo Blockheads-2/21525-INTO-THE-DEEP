@@ -41,6 +41,7 @@ public abstract class InheritableTeleOp extends OpMode {
 
     protected enum LIFT_STATES {
         BOTTOM,
+        LOW,
         MIDDLE,
         TOP
     }
@@ -146,46 +147,46 @@ public abstract class InheritableTeleOp extends OpMode {
     protected void claw() {
         if (a.is(Button.States.TAP)) {
             if (clawState == CLAW_STATES.CLOSED) {
-                robot.claw.setDirection(Servo.Direction.REVERSE);
-                robot.claw.setPosition(0.2);
+                robot.claw.setDirection(Servo.Direction.FORWARD);
+                robot.claw.setPosition(0.1);
                 clawState = CLAW_STATES.OPEN;
             } else if (clawState == CLAW_STATES.OPEN) {
-                robot.claw.setDirection(Servo.Direction.FORWARD);
+                robot.claw.setDirection(Servo.Direction.REVERSE);
                 robot.claw.setPosition(0);
                 clawState = CLAW_STATES.CLOSED;
             }
         }
 
         telemetry.addData("thing", clawState);
+        telemetry.addData("pos", robot.claw.getPosition());
         telemetry.update();
     }
 
     protected void clawAxial() {
-        if (x.is(Button.States.TAP)) {
-            if (clawAxialState == CLAW_AXIAL_STATES.REST) {
-                robot.clawAxial.setDirection(Servo.Direction.REVERSE);
-                robot.clawAxial.setPosition(1);
-                clawAxialState = CLAW_AXIAL_STATES.REVERSE;
-            } else if (clawAxialState == CLAW_AXIAL_STATES.REVERSE) {
-                robot.clawAxial.setDirection(Servo.Direction.REVERSE);
-                robot.clawAxial.setPosition(1);
-                clawAxialState = CLAW_AXIAL_STATES.DOWN;
-            } else if (clawAxialState == CLAW_AXIAL_STATES.DOWN) {
-                robot.clawAxial.setDirection(Servo.Direction.FORWARD);
-                robot.clawAxial.setPosition(0);
-                clawAxialState = CLAW_AXIAL_STATES.REST;
-            }
-        }
-
-        telemetry.addData("pos", clawAxialState);
+//        if (x.is(Button.States.TAP)) {
+//            if (clawAxialState == CLAW_AXIAL_STATES.REST) {
+//                robot.clawAxial.setDirection(Servo.Direction.REVERSE);
+//                robot.clawAxial.setPosition(1);
+//                clawAxialState = CLAW_AXIAL_STATES.REVERSE;
+//            } else if (clawAxialState == CLAW_AXIAL_STATES.REVERSE) {
+//                robot.clawAxial.setDirection(Servo.Direction.REVERSE);
+//                robot.clawAxial.setPosition(1);
+//                clawAxialState = CLAW_AXIAL_STATES.DOWN;
+//            } else if (clawAxialState == CLAW_AXIAL_STATES.DOWN) {
+//                robot.clawAxial.setDirection(Servo.Direction.FORWARD);
+//                robot.clawAxial.setPosition(0);
+//                clawAxialState = CLAW_AXIAL_STATES.REST;
+//            }
+//        }
+        robot.clawAxial.setPower(-gamepad2.right_stick_y);
     }
 
 
     protected void updateButtons() {
-        rightStickDown.update(gamepad1.right_stick_y > 0);
-        rightStickUp.update(gamepad1.right_stick_y < 0);
-        a.update(gamepad1.a);
-        x.update(gamepad1.x);
+        rightStickDown.update(gamepad2.right_stick_y > 0);
+        rightStickUp.update(gamepad2.right_stick_y < 0);
+        a.update(gamepad2.a);
+        x.update(gamepad2.x);
     }
 
     protected void manualServoSet(Button button, Servo servo, double position) {
@@ -197,25 +198,39 @@ public abstract class InheritableTeleOp extends OpMode {
     }
     protected void lift() {
         if (rightStickUp.is(Button.States.TAP)) {
+
             if (liftState == LIFT_STATES.MIDDLE) {
                 robot.outtakeSlide.setTargetPosition((int) Constants.Lift.TOP);
                 robot.outtakeSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 robot.outtakeSlide.setPower(0.75);
                 liftState = LIFT_STATES.TOP;
             }
-            if (liftState == LIFT_STATES.BOTTOM) {
+            if (liftState == LIFT_STATES.LOW) {
                 robot.outtakeSlide.setTargetPosition((int) Constants.Lift.MIDDLE);
                 robot.outtakeSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 robot.outtakeSlide.setPower(0.75);
                 liftState = LIFT_STATES.MIDDLE;
             }
+            if (liftState == LIFT_STATES.BOTTOM) {
+                robot.outtakeSlide.setTargetPosition((int) Constants.Lift.LOW);
+                robot.outtakeSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                robot.outtakeSlide.setPower(0.75);
+                liftState = LIFT_STATES.LOW;
+            }
         }
         if (rightStickDown.is(Button.States.TAP)) {
-            if (liftState == LIFT_STATES.MIDDLE) {
+
+            if (liftState == LIFT_STATES.LOW) {
                 robot.outtakeSlide.setTargetPosition((int) Constants.Lift.BOTTOM);
                 robot.outtakeSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 robot.outtakeSlide.setPower(0.25);
                 liftState = LIFT_STATES.BOTTOM;
+            }
+            if (liftState == LIFT_STATES.MIDDLE) {
+                robot.outtakeSlide.setTargetPosition((int) Constants.Lift.LOW);
+                robot.outtakeSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                robot.outtakeSlide.setPower(0.25);
+                liftState = LIFT_STATES.LOW;
             }
             if (liftState == LIFT_STATES.TOP) {
                 robot.outtakeSlide.setTargetPosition((int) Constants.Lift.MIDDLE);

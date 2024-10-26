@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.teleop;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.util.Button;
 
@@ -13,6 +14,8 @@ public class BaseDrive extends InheritableTeleOp {
     public void start() {
         robot.outtakeSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.outtakeSlide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.claw.setDirection(Servo.Direction.REVERSE);
+        robot.claw.setPosition(0);
     }
 
     @Override
