@@ -178,7 +178,7 @@ public abstract class InheritableTeleOp extends OpMode {
 //                clawAxialState = CLAW_AXIAL_STATES.REST;
 //            }
 //        }
-        robot.clawAxial.setPower(-gamepad2.right_stick_y);
+        robot.clawAxial.setPower(-gamepad2.left_stick_y);
     }
 
 
@@ -239,5 +239,9 @@ public abstract class InheritableTeleOp extends OpMode {
                 liftState = LIFT_STATES.MIDDLE;
             }
         }
+    }
+
+    protected void extendo() {
+
     }
 }
