@@ -12,27 +12,20 @@ import org.firstinspires.ftc.teamcode.util.Button;
 public class BaseDrive extends InheritableTeleOp {
 
     public void start() {
-        robot.outtakeSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.outtakeSlide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.claw.setDirection(Servo.Direction.REVERSE);
-        robot.claw.setPosition(0);
+        robot.leftExtension.setPosition(0);
+        robot.rightExtension.setPosition(0);
     }
 
     @Override
     public void loop() {
         powerModifier();
         drive(drivePower);
-        lift();
         updateButtons();
-        claw();
-        clawAxial();
 
         dashboardTelemetry.addData("left front velocity:", robot.leftFront.getVelocity());
         dashboardTelemetry.addData("left back velocity:", robot.leftBack.getVelocity());
         dashboardTelemetry.addData("right front velocity:", robot.rightFront.getVelocity());
         dashboardTelemetry.addData("right back velocity:", robot.rightBack.getVelocity());
-        dashboardTelemetry.addData("lift velocity:", robot.outtakeSlide.getVelocity());
-        dashboardTelemetry.addData("position", robot.outtakeSlide.getCurrentPosition());
 
         dashboardTelemetry.update();
     }

@@ -19,12 +19,12 @@ public abstract class InheritableTeleOp extends OpMode {
     private CLAW_STATES clawState = CLAW_STATES.CLOSED;
     private CLAW_AXIAL_STATES clawAxialState = CLAW_AXIAL_STATES.REST;
     private LIFT_STATES liftState = LIFT_STATES.BOTTOM;
+    private EXTENSION_STATES extensionState = EXTENSION_STATES.IN;
     protected ElapsedTime time = new ElapsedTime();
-    protected final Button rightStickUp = new Button();
-    protected final Button rightStickDown = new Button();
     protected final Button a = new Button();
     protected final Button x = new Button();
-
+    protected final Button b = new Button();
+    protected final Button y = new Button();
     private double tappedTime = 0;
 
     protected enum CLAW_STATES {
@@ -45,6 +45,11 @@ public abstract class InheritableTeleOp extends OpMode {
         TOP
     }
 
+    protected enum EXTENSION_STATES {
+        IN,
+        OUT
+    }
+
     protected double drivePower = 0.75;
 
     @Override
@@ -53,7 +58,8 @@ public abstract class InheritableTeleOp extends OpMode {
         dashboard = FtcDashboard.getInstance();
         dashboardTelemetry = dashboard.getTelemetry();
 
-        dashboardTelemetry.update();
+        robot.leftExtension.setDirection(Servo.Direction.REVERSE);
+
     }
 
     public void loop() {
@@ -144,10 +150,10 @@ public abstract class InheritableTeleOp extends OpMode {
     }
 
     protected void updateButtons() {
-        rightStickDown.update(gamepad2.right_stick_y > 0);
-        rightStickUp.update(gamepad2.right_stick_y < 0);
         a.update(gamepad2.a);
         x.update(gamepad2.x);
+        y.update(gamepad2.y);
+        b.update(gamepad2.b);
     }
 
     protected void manualServoSet(Button button, Servo servo, double position) {
@@ -157,53 +163,18 @@ public abstract class InheritableTeleOp extends OpMode {
     protected void manualServoSet(Servo servo, double position) {
         servo.setPosition(position);
     }
-//    protected void lift() {
-//        if (rightStickUp.is(Button.States.TAP)) {
-//
-//            if (liftState == LIFT_STATES.MIDDLE) {
-//                robot.outtakeSlide.setTargetPosition((int) Constants.Lift.TOP);
-//                robot.outtakeSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//                robot.outtakeSlide.setPower(0.75);
-//                liftState = LIFT_STATES.TOP;
-//            }
-//            if (liftState == LIFT_STATES.LOW) {
-//                robot.outtakeSlide.setTargetPosition((int) Constants.Lift.MIDDLE);
-//                robot.outtakeSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//                robot.outtakeSlide.setPower(0.75);
-//                liftState = LIFT_STATES.MIDDLE;
-//            }
-//            if (liftState == LIFT_STATES.BOTTOM) {
-//                robot.outtakeSlide.setTargetPosition((int) Constants.Lift.LOW);
-//                robot.outtakeSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//                robot.outtakeSlide.setPower(0.75);
-//                liftState = LIFT_STATES.LOW;
-//            }
-//        }
-//        if (rightStickDown.is(Button.States.TAP)) {
-//
-//            if (liftState == LIFT_STATES.LOW) {
-//                robot.outtakeSlide.setTargetPosition((int) Constants.Lift.BOTTOM);
-//                robot.outtakeSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//                robot.outtakeSlide.setPower(0.25);
-//                liftState = LIFT_STATES.BOTTOM;
-//            }
-//            if (liftState == LIFT_STATES.MIDDLE) {
-//                robot.outtakeSlide.setTargetPosition((int) Constants.Lift.LOW);
-//                robot.outtakeSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//                robot.outtakeSlide.setPower(0.25);
-//                liftState = LIFT_STATES.LOW;
-//            }
-//            if (liftState == LIFT_STATES.TOP) {
-//                robot.outtakeSlide.setTargetPosition((int) Constants.Lift.MIDDLE);
-//                robot.outtakeSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//                robot.outtakeSlide.setPower(0.25);
-//                liftState = LIFT_STATES.MIDDLE;
-//            }
-//        }
-//    }
 
     protected void extension() {
-        robot.leftExtension.setPosition(0);
-        robot.rightExtension.setPosition(0);
+        if (b.is(Button.States.TAP)) {
+            if (extensionState == EXTENSION_STATES.IN) {
+                robot.leftExtension.setPosition(0.3);
+                robot.rightExtension.setPosition(0.3);
+                extensionState = EXTENSION_STATES.OUT;
+            } else if (extensionState == EXTENSION_STATES.OUT) {
+                robot.leftExtension.setPosition(0);
+                robot.rightExtension.setPosition(0);
+                extensionState = EXTENSION_STATES.IN;
+            }
+        }
     }
 }
