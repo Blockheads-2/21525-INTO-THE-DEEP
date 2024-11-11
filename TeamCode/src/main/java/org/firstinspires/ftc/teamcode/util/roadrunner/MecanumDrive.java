@@ -41,7 +41,6 @@ import com.acmerobotics.roadrunner.ftc.PositionVelocityPair;
 import com.acmerobotics.roadrunner.ftc.RawEncoder;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
-import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -77,9 +76,9 @@ public final class MecanumDrive {
             new ProfileAccelConstraint(PARAMS.minProfileAccel, PARAMS.maxProfileAccel);
     public final DcMotorEx leftFront, leftBack, rightBack, rightFront;
     public final VoltageSensor voltageSensor;
-    public final DcMotorEx outtakeSlide;
-    public final Servo claw;
-    public final CRServo clawAxial;
+//    public final DcMotorEx outtakeSlide;
+    public final Servo leftExtension, rightExtension;
+
     public final LazyImu lazyImu;
     public final Localizer localizer;
     private final LinkedList<Pose2d> poseHistory = new LinkedList<>();
@@ -103,7 +102,10 @@ public final class MecanumDrive {
         leftBack = hardwareMap.get(DcMotorEx.class, "leftBack");
         rightBack = hardwareMap.get(DcMotorEx.class, "rightBack");
         rightFront = hardwareMap.get(DcMotorEx.class, "rightFront");
-        outtakeSlide = hardwareMap.get(DcMotorEx.class, "outtakeSlide");
+//        outtakeSlide = hardwareMap.get(DcMotorEx.class, "outtakeSlide");
+
+        leftExtension = hardwareMap.get(Servo.class, "leftExtension");
+        rightExtension = hardwareMap.get(Servo.class, "rightExtension");
 
         leftFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         leftBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -113,11 +115,6 @@ public final class MecanumDrive {
         // TODO: reverse motor directions if needed
         leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
         leftBack.setDirection(DcMotorSimple.Direction.REVERSE);
-
-
-        claw = hardwareMap.get(Servo.class, "claw");
-        clawAxial = hardwareMap.get(CRServo.class, "clawAxial");
-
 
         //   see https://ftc-docs.firstinspires.org/en/latest/hardware_and_software_configuration/configuring/index.html
         lazyImu = new LazyImu(hardwareMap, "imu", new RevHubOrientationOnRobot(
@@ -232,7 +229,7 @@ public final class MecanumDrive {
 
     public class DriveLocalizer implements Localizer {
         public final Encoder leftFront, leftBack, rightBack, rightFront;
-        public final Encoder outtakeSlide;
+//        public final Encoder outtakeSlide;
         public final IMU imu;
 
         private int lastLeftFrontPos, lastLeftBackPos, lastRightBackPos, lastRightFrontPos;
@@ -244,7 +241,7 @@ public final class MecanumDrive {
             leftBack = new OverflowEncoder(new RawEncoder(MecanumDrive.this.leftBack));
             rightBack = new OverflowEncoder(new RawEncoder(MecanumDrive.this.rightBack));
             rightFront = new OverflowEncoder(new RawEncoder(MecanumDrive.this.rightFront));
-            outtakeSlide = new OverflowEncoder(new RawEncoder(MecanumDrive.this.outtakeSlide));
+//            outtakeSlide = new OverflowEncoder(new RawEncoder(MecanumDrive.this.outtakeSlide));
 
 
             imu = lazyImu.get();
