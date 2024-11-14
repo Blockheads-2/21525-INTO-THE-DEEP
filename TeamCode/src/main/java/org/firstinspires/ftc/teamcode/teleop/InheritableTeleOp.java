@@ -167,8 +167,8 @@ public abstract class InheritableTeleOp extends OpMode {
     protected void extension() {
         if (b.is(Button.States.TAP)) {
             if (extensionState == EXTENSION_STATES.IN) {
-                robot.leftExtension.setPosition(0.3);
-                robot.rightExtension.setPosition(0.3);
+                robot.leftExtension.setPosition(0.6);
+                robot.rightExtension.setPosition(0.6);
                 extensionState = EXTENSION_STATES.OUT;
             } else if (extensionState == EXTENSION_STATES.OUT) {
                 robot.leftExtension.setPosition(0);
