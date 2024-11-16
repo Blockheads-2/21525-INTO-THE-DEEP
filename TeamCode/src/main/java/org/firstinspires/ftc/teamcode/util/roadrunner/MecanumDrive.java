@@ -76,7 +76,8 @@ public final class MecanumDrive {
             new ProfileAccelConstraint(PARAMS.minProfileAccel, PARAMS.maxProfileAccel);
     public final DcMotorEx leftFront, leftBack, rightBack, rightFront;
     public final VoltageSensor voltageSensor;
-    public final Servo leftExtension, rightExtension, leftPivot, rightPivot;
+    public final Servo leftExtension, rightExtension;
+//            leftPivot, rightPivot;
 
     public final LazyImu lazyImu;
     public final Localizer localizer;
@@ -105,8 +106,8 @@ public final class MecanumDrive {
 
         leftExtension = hardwareMap.get(Servo.class, "leftExtension");
         rightExtension = hardwareMap.get(Servo.class, "rightExtension");
-        leftPivot = hardwareMap.get(Servo.class, "leftPivot");
-        rightPivot = hardwareMap.get(Servo.class, "rightPivot");
+//        leftPivot = hardwareMap.get(Servo.class, "leftPivot");
+//        rightPivot = hardwareMap.get(Servo.class, "rightPivot");
 
 
         leftFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);

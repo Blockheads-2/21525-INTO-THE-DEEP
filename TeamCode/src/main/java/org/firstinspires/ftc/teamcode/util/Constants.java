@@ -21,5 +21,8 @@ public class Constants {
         public static double MIDDLE = 554.503125;
         public static double LOW = 150;
         public static double BOTTOM = 50;
+
+        public static double UPPER_EXTENSION_BOUND = 0;
+        public static double LOWER_EXTENSION_BOUND = 0.5;
     }
 }

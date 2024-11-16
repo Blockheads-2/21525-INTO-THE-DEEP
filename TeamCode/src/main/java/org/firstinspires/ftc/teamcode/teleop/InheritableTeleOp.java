@@ -65,7 +65,7 @@ public abstract class InheritableTeleOp extends OpMode {
         dashboardTelemetry = dashboard.getTelemetry();
 
         robot.leftExtension.setDirection(Servo.Direction.REVERSE);
-        robot.rightPivot.setDirection(Servo.Direction.REVERSE);
+//        robot.rightPivot.setDirection(Servo.Direction.REVERSE);
     }
 
     public void loop() {
@@ -171,30 +171,18 @@ public abstract class InheritableTeleOp extends OpMode {
     }
 
     protected void extension() {
-        if (b.is(Button.States.TAP)) {
-            if (extensionState == EXTENSION_STATES.IN) {
-                robot.leftExtension.setPosition(0.6);
-                robot.rightExtension.setPosition(0.6);
-                extensionState = EXTENSION_STATES.OUT;
-            } else if (extensionState == EXTENSION_STATES.OUT) {
-                robot.leftExtension.setPosition(0);
-                robot.rightExtension.setPosition(0);
-                extensionState = EXTENSION_STATES.IN;
-            }
+        if (b.is(Button.States.HELD) && robot.leftExtension.getPosition() < 0.5) {
+            robot.leftExtension.setPosition(robot.leftExtension.getPosition() + 0.01);
+            robot.rightExtension.setPosition(robot.rightExtension.getPosition() + 0.01);
         }
+        if (a.is(Button.States.HELD) && robot.leftExtension.getPosition() > 0) {
+            robot.leftExtension.setPosition(robot.leftExtension.getPosition() - 0.01);
+            robot.rightExtension.setPosition(robot.rightExtension.getPosition() - 0.01);
+        }
+
+        dashboardTelemetry.addData("right", robot.rightExtension.getPosition());
+        dashboardTelemetry.addData("left", robot.leftExtension.getPosition());
     }
 
-    protected void pivot() {
-        if (a.is(Button.States.TAP)) {
-            if (pivotState == PIVOT_STATES.UP) {
-                robot.leftPivot.setPosition(0.3);
-                robot.rightPivot.setPosition(0.3);
-                pivotState = PIVOT_STATES.DOWN;
-            } else if (pivotState == PIVOT_STATES.DOWN) {
-                robot.leftPivot.setPosition(0);
-                robot.rightPivot.setPosition(0);
-                pivotState = PIVOT_STATES.UP;
-            }
-        }
-    }
+    protected void pivot() {}
 }
