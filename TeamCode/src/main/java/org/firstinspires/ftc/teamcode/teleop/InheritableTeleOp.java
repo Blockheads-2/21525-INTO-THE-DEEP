@@ -20,6 +20,7 @@ public abstract class InheritableTeleOp extends OpMode {
     private CLAW_AXIAL_STATES clawAxialState = CLAW_AXIAL_STATES.REST;
     private LIFT_STATES liftState = LIFT_STATES.BOTTOM;
     private EXTENSION_STATES extensionState = EXTENSION_STATES.IN;
+    private PIVOT_STATES pivotState = PIVOT_STATES.DOWN;
     protected ElapsedTime time = new ElapsedTime();
     protected final Button a = new Button();
     protected final Button x = new Button();
@@ -42,12 +43,17 @@ public abstract class InheritableTeleOp extends OpMode {
         BOTTOM,
         LOW,
         MIDDLE,
-        TOP
+        TOP5
     }
 
     protected enum EXTENSION_STATES {
         IN,
         OUT
+    }
+
+    protected enum PIVOT_STATES {
+        DOWN,
+        UP
     }
 
     protected double drivePower = 0.75;
@@ -59,7 +65,7 @@ public abstract class InheritableTeleOp extends OpMode {
         dashboardTelemetry = dashboard.getTelemetry();
 
         robot.leftExtension.setDirection(Servo.Direction.REVERSE);
-
+        robot.rightPivot.setDirection(Servo.Direction.REVERSE);
     }
 
     public void loop() {
@@ -174,6 +180,20 @@ public abstract class InheritableTeleOp extends OpMode {
                 robot.leftExtension.setPosition(0);
                 robot.rightExtension.setPosition(0);
                 extensionState = EXTENSION_STATES.IN;
+            }
+        }
+    }
+
+    protected void pivot() {
+        if (a.is(Button.States.TAP)) {
+            if (pivotState == PIVOT_STATES.UP) {
+                robot.leftPivot.setPosition(0.3);
+                robot.rightPivot.setPosition(0.3);
+                pivotState = PIVOT_STATES.DOWN;
+            } else if (pivotState == PIVOT_STATES.DOWN) {
+                robot.leftPivot.setPosition(0);
+                robot.rightPivot.setPosition(0);
+                pivotState = PIVOT_STATES.UP;
             }
         }
     }
