@@ -20,12 +20,15 @@ public abstract class InheritableTeleOp extends OpMode {
     private CLAW_AXIAL_STATES clawAxialState = CLAW_AXIAL_STATES.REST;
     private LIFT_STATES liftState = LIFT_STATES.BOTTOM;
     private EXTENSION_STATES extensionState = EXTENSION_STATES.IN;
-    private PIVOT_STATES pivotState = PIVOT_STATES.DOWN;
+    private PIVOT_STATES pivotState = PIVOT_STATES.DEPOSIT;
     protected ElapsedTime time = new ElapsedTime();
     protected final Button a = new Button();
     protected final Button x = new Button();
     protected final Button b = new Button();
     protected final Button y = new Button();
+    protected final Button gamepad2RightTriggerUp = new Button();
+    protected final Button gamepad2RightTriggerDown = new Button();
+
     private double tappedTime = 0;
 
     protected enum CLAW_STATES {
@@ -52,8 +55,9 @@ public abstract class InheritableTeleOp extends OpMode {
     }
 
     protected enum PIVOT_STATES {
-        DOWN,
-        UP
+        COLLECT,
+        HOLD,
+        DEPOSIT
     }
 
     protected double drivePower = 0.75;
@@ -64,7 +68,7 @@ public abstract class InheritableTeleOp extends OpMode {
         dashboard = FtcDashboard.getInstance();
         dashboardTelemetry = dashboard.getTelemetry();
 
-        robot.leftExtension.setDirection(Servo.Direction.REVERSE);
+        robot.rightExtension.setDirection(Servo.Direction.REVERSE);
 //        robot.rightPivot.setDirection(Servo.Direction.REVERSE);
     }
 
@@ -160,6 +164,9 @@ public abstract class InheritableTeleOp extends OpMode {
         x.update(gamepad2.x);
         y.update(gamepad2.y);
         b.update(gamepad2.b);
+        gamepad2RightTriggerUp.update(gamepad2.right_stick_y > 0.1);
+        gamepad2RightTriggerUp.update(gamepad2.right_stick_y < -0.1);
+
     }
 
     protected void manualServoSet(Button button, Servo servo, double position) {
@@ -171,18 +178,20 @@ public abstract class InheritableTeleOp extends OpMode {
     }
 
     protected void extension() {
-        if (b.is(Button.States.HELD) && robot.leftExtension.getPosition() < 0.5) {
+        if (gamepad2RightTriggerUp.is(Button.States.HELD) && robot.leftExtension.getPosition() < 0.4) {
             robot.leftExtension.setPosition(robot.leftExtension.getPosition() + 0.01);
             robot.rightExtension.setPosition(robot.rightExtension.getPosition() + 0.01);
         }
-        if (a.is(Button.States.HELD) && robot.leftExtension.getPosition() > 0) {
+        if (gamepad2RightTriggerDown.is(Button.States.HELD) && robot.leftExtension.getPosition() > 0) {
             robot.leftExtension.setPosition(robot.leftExtension.getPosition() - 0.01);
             robot.rightExtension.setPosition(robot.rightExtension.getPosition() - 0.01);
         }
 
-        dashboardTelemetry.addData("right", robot.rightExtension.getPosition());
-        dashboardTelemetry.addData("left", robot.leftExtension.getPosition());
+        dashboardTelemetry.addData("up", gamepad2RightTriggerUp.getState());
+        dashboardTelemetry.addData("down", gamepad2RightTriggerDown.getState());
     }
 
-    protected void pivot() {}
+    protected void pivot() {
+
+    }
 }
