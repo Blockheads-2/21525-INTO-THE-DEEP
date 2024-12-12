@@ -11,9 +11,12 @@ import org.firstinspires.ftc.teamcode.util.Button;
 @TeleOp(name="Base Drive")
 public class BaseDrive extends InheritableTeleOp {
 
+    @Override
     public void start() {
         robot.leftExtension.setPosition(0);
         robot.rightExtension.setPosition(0);
+        robot.leftPivot.setPosition(0);
+        robot.rightPivot.setPosition(0);
     }
 
     @Override
@@ -23,6 +26,7 @@ public class BaseDrive extends InheritableTeleOp {
         updateButtons();
         extension();
         pivot();
+        intake();
 
         dashboardTelemetry.addData("left front velocity:", robot.leftFront.getVelocity());
         dashboardTelemetry.addData("left back velocity:", robot.leftBack.getVelocity());

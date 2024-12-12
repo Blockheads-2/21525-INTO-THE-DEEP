@@ -28,6 +28,9 @@ public abstract class InheritableTeleOp extends OpMode {
     protected final Button y = new Button();
     protected final Button gamepad2RightTriggerUp = new Button();
     protected final Button gamepad2RightTriggerDown = new Button();
+    protected final Button dUp = new Button();
+    protected final Button dDown = new Button();
+
 
     private double tappedTime = 0;
 
@@ -46,19 +49,21 @@ public abstract class InheritableTeleOp extends OpMode {
         BOTTOM,
         LOW,
         MIDDLE,
-        TOP5
-    }
-
-    protected enum EXTENSION_STATES {
-        IN,
-        OUT
+        TOP
     }
 
     protected enum PIVOT_STATES {
         COLLECT,
         HOLD,
+        REVERSE_HOLD,
         DEPOSIT
     }
+
+    protected enum EXTENSION_STATES {
+        OUT,
+        IN
+    }
+
 
     protected double drivePower = 0.75;
 
@@ -68,8 +73,8 @@ public abstract class InheritableTeleOp extends OpMode {
         dashboard = FtcDashboard.getInstance();
         dashboardTelemetry = dashboard.getTelemetry();
 
-        robot.rightExtension.setDirection(Servo.Direction.REVERSE);
-//        robot.rightPivot.setDirection(Servo.Direction.REVERSE);
+        robot.leftExtension.setDirection(Servo.Direction.REVERSE);
+        robot.leftPivot.setDirection(Servo.Direction.REVERSE);
     }
 
     public void loop() {
@@ -164,9 +169,10 @@ public abstract class InheritableTeleOp extends OpMode {
         x.update(gamepad2.x);
         y.update(gamepad2.y);
         b.update(gamepad2.b);
-        gamepad2RightTriggerUp.update(gamepad2.right_stick_y > 0.1);
+        gamepad2RightTriggerDown.update(gamepad2.right_stick_y > 0.1);
         gamepad2RightTriggerUp.update(gamepad2.right_stick_y < -0.1);
-
+        dUp.update(gamepad2.dpad_up);
+        dDown.update(gamepad2.dpad_down);
     }
 
     protected void manualServoSet(Button button, Servo servo, double position) {
@@ -178,20 +184,44 @@ public abstract class InheritableTeleOp extends OpMode {
     }
 
     protected void extension() {
-        if (gamepad2RightTriggerUp.is(Button.States.HELD) && robot.leftExtension.getPosition() < 0.4) {
+        if (dUp.is(Button.States.HELD) && robot.leftExtension.getPosition() < 0.45) {
             robot.leftExtension.setPosition(robot.leftExtension.getPosition() + 0.01);
             robot.rightExtension.setPosition(robot.rightExtension.getPosition() + 0.01);
         }
-        if (gamepad2RightTriggerDown.is(Button.States.HELD) && robot.leftExtension.getPosition() > 0) {
+        if (dDown.is(Button.States.HELD) && robot.leftExtension.getPosition() > 0) {
             robot.leftExtension.setPosition(robot.leftExtension.getPosition() - 0.01);
             robot.rightExtension.setPosition(robot.rightExtension.getPosition() - 0.01);
         }
-
-        dashboardTelemetry.addData("up", gamepad2RightTriggerUp.getState());
-        dashboardTelemetry.addData("down", gamepad2RightTriggerDown.getState());
     }
 
     protected void pivot() {
+        if (b.is(Button.States.TAP)) {
+            if (pivotState == PIVOT_STATES.DEPOSIT) {
+                robot.leftPivot.setPosition(0.25);
+                robot.rightPivot.setPosition(0.25);
+                pivotState = PIVOT_STATES.HOLD;
+            } else if (pivotState == PIVOT_STATES.HOLD) {
+                robot.leftPivot.setPosition(0.7);
+                robot.rightPivot.setPosition(0.7);
+                pivotState = PIVOT_STATES.COLLECT;
+            } else if (pivotState == PIVOT_STATES.COLLECT) {
+                robot.leftPivot.setPosition(0.25);
+                robot.rightPivot.setPosition(0.25);
+                pivotState = PIVOT_STATES.REVERSE_HOLD;
+            } else if (pivotState == PIVOT_STATES.REVERSE_HOLD) {
+                robot.leftPivot.setPosition(0);
+                robot.rightPivot.setPosition(0);
+                pivotState = PIVOT_STATES.DEPOSIT;
+            }
+        }
+        dashboardTelemetry.addData("b", b.getState());
+    }
 
+    protected void intake() {
+        if (y.is(Button.States.HELD)) {
+            robot.intake.setPosition(1);
+        } else {
+            robot.intake.setPosition(0);
+        }
     }
 }
