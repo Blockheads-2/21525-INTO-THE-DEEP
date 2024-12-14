@@ -233,7 +233,9 @@ public abstract class InheritableTeleOp extends OpMode {
 
     protected void intake() {
         if (y.is(Button.States.HELD)) {
-            robot.intake.setPower(1);
+            robot.intake.setPosition(1);
+        } else {
+            robot.intake.setPosition(0);
         }
     }
 }

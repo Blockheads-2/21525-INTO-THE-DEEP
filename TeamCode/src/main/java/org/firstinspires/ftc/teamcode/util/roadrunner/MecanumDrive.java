@@ -78,7 +78,7 @@ public final class MecanumDrive {
     public final DcMotorEx leftFront, leftBack, rightBack, rightFront;
     public final VoltageSensor voltageSensor;
     public final Servo leftExtension, rightExtension, leftPivot, rightPivot, leftOuttakePivot, rightOuttakePivot;
-    public final CRServo intake;
+    public final Servo intake;
     public final LazyImu lazyImu;
     public final Localizer localizer;
     private final LinkedList<Pose2d> poseHistory = new LinkedList<>();
@@ -111,7 +111,7 @@ public final class MecanumDrive {
         leftOuttakePivot = hardwareMap.get(Servo.class, "leftOuttakePivot");
         rightOuttakePivot = hardwareMap.get(Servo.class, "rightOuttakePivot");
 
-        intake = hardwareMap.get(CRServo.class, "intake");
+        intake = hardwareMap.get(Servo.class, "intake");
 
 
         leftFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
