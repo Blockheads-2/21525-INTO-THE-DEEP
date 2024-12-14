@@ -17,6 +17,8 @@ public class BaseDrive extends InheritableTeleOp {
         robot.rightExtension.setPosition(0);
         robot.leftPivot.setPosition(0);
         robot.rightPivot.setPosition(0);
+        robot.leftOuttakePivot.setPosition(0);
+        robot.rightOuttakePivot.setPosition(0);
     }
 
     @Override
@@ -27,6 +29,7 @@ public class BaseDrive extends InheritableTeleOp {
         extension();
         pivot();
         intake();
+        outtakePivot();
 
         dashboardTelemetry.addData("left front velocity:", robot.leftFront.getVelocity());
         dashboardTelemetry.addData("left back velocity:", robot.leftBack.getVelocity());

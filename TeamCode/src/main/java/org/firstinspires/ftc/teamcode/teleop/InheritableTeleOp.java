@@ -17,7 +17,7 @@ public abstract class InheritableTeleOp extends OpMode {
     protected FtcDashboard dashboard;
     protected Telemetry dashboardTelemetry;
     private CLAW_STATES clawState = CLAW_STATES.CLOSED;
-    private CLAW_AXIAL_STATES clawAxialState = CLAW_AXIAL_STATES.REST;
+    private OUTTAKE_PIVOT_STATES outtakePivotState = OUTTAKE_PIVOT_STATES.REST;
     private LIFT_STATES liftState = LIFT_STATES.BOTTOM;
     private EXTENSION_STATES extensionState = EXTENSION_STATES.IN;
     private PIVOT_STATES pivotState = PIVOT_STATES.DEPOSIT;
@@ -39,10 +39,9 @@ public abstract class InheritableTeleOp extends OpMode {
         CLOSED
     }
 
-    protected enum CLAW_AXIAL_STATES {
+    protected enum OUTTAKE_PIVOT_STATES {
         REST,
-        REVERSE,
-        DOWN
+        DEPOSIT
     }
 
     protected enum LIFT_STATES {
@@ -75,6 +74,7 @@ public abstract class InheritableTeleOp extends OpMode {
 
         robot.leftExtension.setDirection(Servo.Direction.REVERSE);
         robot.leftPivot.setDirection(Servo.Direction.REVERSE);
+        robot.leftOuttakePivot.setDirection(Servo.Direction.REVERSE);
     }
 
     public void loop() {
@@ -217,11 +217,23 @@ public abstract class InheritableTeleOp extends OpMode {
         dashboardTelemetry.addData("b", b.getState());
     }
 
+    public void outtakePivot() {
+        if (x.is(Button.States.TAP)) {
+            if (outtakePivotState == OUTTAKE_PIVOT_STATES.REST) {
+                robot.leftOuttakePivot.setPosition(0.5);
+                robot.rightOuttakePivot.setPosition(0.5);
+                outtakePivotState = OUTTAKE_PIVOT_STATES.DEPOSIT;
+            } else if (outtakePivotState == OUTTAKE_PIVOT_STATES.DEPOSIT) {
+                robot.leftOuttakePivot.setPosition(0);
+                robot.rightOuttakePivot.setPosition(0);
+                outtakePivotState = OUTTAKE_PIVOT_STATES.REST;
+            }
+        }
+    }
+
     protected void intake() {
         if (y.is(Button.States.HELD)) {
-            robot.intake.setPosition(1);
-        } else {
-            robot.intake.setPosition(0);
+            robot.intake.setPower(1);
         }
     }
 }
