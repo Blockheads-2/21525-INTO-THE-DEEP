@@ -220,8 +220,8 @@ public abstract class InheritableTeleOp extends OpMode {
     public void outtakePivot() {
         if (x.is(Button.States.TAP)) {
             if (outtakePivotState == OUTTAKE_PIVOT_STATES.REST) {
-                robot.leftOuttakePivot.setPosition(0.5);
-                robot.rightOuttakePivot.setPosition(0.5);
+                robot.leftOuttakePivot.setPosition(0.6);
+                robot.rightOuttakePivot.setPosition(0.6);
                 outtakePivotState = OUTTAKE_PIVOT_STATES.DEPOSIT;
             } else if (outtakePivotState == OUTTAKE_PIVOT_STATES.DEPOSIT) {
                 robot.leftOuttakePivot.setPosition(0);
@@ -233,9 +233,13 @@ public abstract class InheritableTeleOp extends OpMode {
 
     protected void intake() {
         if (y.is(Button.States.HELD)) {
-            robot.intake.setPosition(1);
+            robot.intake.setPower(1);
         } else {
-            robot.intake.setPosition(0);
+            robot.intake.setPower(0);
         }
+    }
+
+    protected void outtake() {
+
     }
 }
