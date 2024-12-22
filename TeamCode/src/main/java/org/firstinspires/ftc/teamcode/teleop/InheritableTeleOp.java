@@ -3,25 +3,14 @@ package org.firstinspires.ftc.teamcode.teleop;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.util.Button;
-import org.firstinspires.ftc.teamcode.util.Constants;
 import org.firstinspires.ftc.teamcode.util.roadrunner.MecanumDrive;
 
 public abstract class InheritableTeleOp extends OpMode {
-    protected MecanumDrive robot;
-    protected FtcDashboard dashboard;
-    protected Telemetry dashboardTelemetry;
-    private CLAW_STATES clawState = CLAW_STATES.CLOSED;
-    private OUTTAKE_PIVOT_STATES outtakePivotState = OUTTAKE_PIVOT_STATES.REST;
-    private LIFT_STATES liftState = LIFT_STATES.BOTTOM;
-    private EXTENSION_STATES extensionState = EXTENSION_STATES.IN;
-    private PIVOT_STATES pivotState = PIVOT_STATES.DEPOSIT;
-    protected ElapsedTime time = new ElapsedTime();
     protected final Button a = new Button();
     protected final Button x = new Button();
     protected final Button b = new Button();
@@ -30,41 +19,16 @@ public abstract class InheritableTeleOp extends OpMode {
     protected final Button gamepad2RightTriggerDown = new Button();
     protected final Button dUp = new Button();
     protected final Button dDown = new Button();
-
-
-    private double tappedTime = 0;
-
-    protected enum CLAW_STATES {
-        OPEN,
-        CLOSED
-    }
-
-    protected enum OUTTAKE_PIVOT_STATES {
-        REST,
-        DEPOSIT
-    }
-
-    protected enum LIFT_STATES {
-        BOTTOM,
-        LOW,
-        MIDDLE,
-        TOP
-    }
-
-    protected enum PIVOT_STATES {
-        COLLECT,
-        HOLD,
-        REVERSE_HOLD,
-        DEPOSIT
-    }
-
-    protected enum EXTENSION_STATES {
-        OUT,
-        IN
-    }
-
-
+    protected MecanumDrive robot;
+    protected FtcDashboard dashboard;
+    protected Telemetry dashboardTelemetry;
+    protected ElapsedTime time = new ElapsedTime();
     protected double drivePower = 0.75;
+    private CLAW_STATES clawState = CLAW_STATES.CLOSED;
+    private OUTTAKE_PIVOT_STATES outtakePivotState = OUTTAKE_PIVOT_STATES.REST;
+    private LIFT_STATES liftState = LIFT_STATES.BOTTOM;
+    private EXTENSION_STATES extensionState = EXTENSION_STATES.IN;
+    private PIVOT_STATES pivotState = PIVOT_STATES.DEPOSIT;
 
     @Override
     public void init() {
@@ -109,7 +73,6 @@ public abstract class InheritableTeleOp extends OpMode {
         double directionR = 0;
 
         if (Math.sqrt(gamepad1.left_stick_x * gamepad1.left_stick_x + gamepad1.left_stick_y * gamepad1.left_stick_y) > 0.25) {
-
             double directionAngle = Math.round(Math.atan2(-gamepad1.left_stick_y, gamepad1.left_stick_x) / (Math.PI / 4)) * (Math.PI / 4);
 
             directionX = Math.cos(directionAngle);
@@ -241,5 +204,34 @@ public abstract class InheritableTeleOp extends OpMode {
 
     protected void outtake() {
 
+    }
+
+    protected enum CLAW_STATES {
+        OPEN,
+        CLOSED
+    }
+
+    protected enum OUTTAKE_PIVOT_STATES {
+        REST,
+        DEPOSIT
+    }
+
+    protected enum LIFT_STATES {
+        BOTTOM,
+        LOW,
+        MIDDLE,
+        TOP
+    }
+
+    protected enum PIVOT_STATES {
+        COLLECT,
+        HOLD,
+        REVERSE_HOLD,
+        DEPOSIT
+    }
+
+    protected enum EXTENSION_STATES {
+        OUT,
+        IN
     }
 }
