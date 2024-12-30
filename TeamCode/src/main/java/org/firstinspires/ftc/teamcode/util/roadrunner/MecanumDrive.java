@@ -75,7 +75,7 @@ public final class MecanumDrive {
             ));
     public final AccelConstraint defaultAccelConstraint =
             new ProfileAccelConstraint(PARAMS.minProfileAccel, PARAMS.maxProfileAccel);
-    public final DcMotorEx leftFront, leftBack, rightBack, rightFront;
+    public final DcMotorEx leftFront, leftBack, leftLift, rightBack, rightFront, rightLift;
     public final VoltageSensor voltageSensor;
     public final Servo leftExtension, rightExtension, leftPivot, rightPivot, leftOuttakePivot, rightOuttakePivot;
     public final CRServo intake;
@@ -100,9 +100,10 @@ public final class MecanumDrive {
         //   see https://ftc-docs.firstinspires.org/en/latest/hardware_and_software_configuration/configuring/index.html
         leftFront = hardwareMap.get(DcMotorEx.class, "leftFront");
         leftBack = hardwareMap.get(DcMotorEx.class, "leftBack");
+        leftLift = hardwareMap.get(DcMotorEx.class, "leftLift");
         rightBack = hardwareMap.get(DcMotorEx.class, "rightBack");
         rightFront = hardwareMap.get(DcMotorEx.class, "rightFront");
-//        outtakeSlide = hardwareMap.get(DcMotorEx.class, "outtakeSlide");
+        rightLift = hardwareMap.get(DcMotorEx.class, "rightLift");
 
         leftExtension = hardwareMap.get(Servo.class, "leftExtension");
         rightExtension = hardwareMap.get(Servo.class, "rightExtension");
@@ -122,6 +123,7 @@ public final class MecanumDrive {
         // TODO: reverse motor directions if needed
         leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
         leftBack.setDirection(DcMotorSimple.Direction.REVERSE);
+        leftLift.setDirection(DcMotorSimple.Direction.REVERSE);
 
         //   see https://ftc-docs.firstinspires.org/en/latest/hardware_and_software_configuration/configuring/index.html
         lazyImu = new LazyImu(hardwareMap, "imu", new RevHubOrientationOnRobot(

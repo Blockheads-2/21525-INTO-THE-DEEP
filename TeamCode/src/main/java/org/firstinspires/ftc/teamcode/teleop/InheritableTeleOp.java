@@ -3,11 +3,13 @@ package org.firstinspires.ftc.teamcode.teleop;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.util.Button;
+import org.firstinspires.ftc.teamcode.util.Constants;
 import org.firstinspires.ftc.teamcode.util.roadrunner.MecanumDrive;
 
 public abstract class InheritableTeleOp extends OpMode {
@@ -19,6 +21,8 @@ public abstract class InheritableTeleOp extends OpMode {
     protected final Button gamepad2RightTriggerDown = new Button();
     protected final Button dUp = new Button();
     protected final Button dDown = new Button();
+    protected final Button rightStickDown = new Button();
+    protected final Button rightStickUp = new Button();
     protected MecanumDrive robot;
     protected FtcDashboard dashboard;
     protected Telemetry dashboardTelemetry;
@@ -134,6 +138,8 @@ public abstract class InheritableTeleOp extends OpMode {
         b.update(gamepad2.b);
         gamepad2RightTriggerDown.update(gamepad2.right_stick_y > 0.1);
         gamepad2RightTriggerUp.update(gamepad2.right_stick_y < -0.1);
+        rightStickDown.update(gamepad2.right_stick_y > 0);
+        rightStickUp.update(gamepad2.right_stick_y < 0);
         dUp.update(gamepad2.dpad_up);
         dDown.update(gamepad2.dpad_down);
     }
@@ -202,8 +208,74 @@ public abstract class InheritableTeleOp extends OpMode {
         }
     }
 
-    protected void outtake() {
+    protected void lift() {
+        if (rightStickUp.is(Button.States.TAP)) {
+            if (liftState == LIFT_STATES.MIDDLE) {
+                robot.leftLift.setTargetPosition((int) Constants.Lift.TOP);
+                robot.rightLift.setTargetPosition((int) Constants.Lift.TOP);
+                robot.leftLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                robot.rightLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                robot.leftLift.setPower(0.75);
+                robot.rightLift.setPower(0.75);
+                liftState = LIFT_STATES.TOP;
+            }
+            if (liftState == LIFT_STATES.LOW) {
+                robot.leftLift.setTargetPosition((int) Constants.Lift.MIDDLE);
+                robot.rightLift.setTargetPosition((int) Constants.Lift.MIDDLE);
+                robot.leftLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                robot.rightLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                robot.leftLift.setPower(0.75);
+                robot.rightLift.setPower(0.75);
+                liftState = LIFT_STATES.MIDDLE;
+            }
+            if (liftState == LIFT_STATES.BOTTOM) {
+                robot.leftLift.setTargetPosition((int) Constants.Lift.LOW);
+                robot.rightLift.setTargetPosition((int) Constants.Lift.LOW);
+                robot.leftLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                robot.rightLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                robot.leftLift.setPower(0.75);
+                robot.rightLift.setPower(0.75);
+                liftState = LIFT_STATES.LOW;
+            }
+        }
+        if (rightStickDown.is(Button.States.TAP)) {
+            if (liftState == LIFT_STATES.LOW) {
+                robot.leftLift.setTargetPosition((int) Constants.Lift.BOTTOM);
+                robot.rightLift.setTargetPosition((int) Constants.Lift.BOTTOM);
 
+                robot.leftLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                robot.rightLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+                robot.leftLift.setPower(0.25);
+                robot.rightLift.setPower(0.25);
+
+                liftState = LIFT_STATES.BOTTOM;
+            }
+            if (liftState == LIFT_STATES.MIDDLE) {
+                robot.leftLift.setTargetPosition((int) Constants.Lift.LOW);
+                robot.rightLift.setTargetPosition((int) Constants.Lift.LOW);
+
+                robot.leftLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                robot.rightLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+                robot.leftLift.setPower(0.25);
+                robot.rightLift.setPower(0.25);
+
+                liftState = LIFT_STATES.LOW;
+            }
+            if (liftState == LIFT_STATES.TOP) {
+                robot.leftLift.setTargetPosition((int) Constants.Lift.MIDDLE);
+                robot.rightLift.setTargetPosition((int) Constants.Lift.MIDDLE);
+
+                robot.leftLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                robot.rightLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+                robot.leftLift.setPower(0.25);
+                robot.rightLift.setPower(0.25);
+
+                liftState = LIFT_STATES.MIDDLE;
+            }
+        }
     }
 
     protected enum CLAW_STATES {

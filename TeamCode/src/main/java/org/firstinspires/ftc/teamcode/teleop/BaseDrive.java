@@ -30,6 +30,7 @@ public class BaseDrive extends InheritableTeleOp {
         pivot();
         intake();
         outtakePivot();
+        lift();
 
         dashboardTelemetry.addData("left front velocity:", robot.leftFront.getVelocity());
         dashboardTelemetry.addData("left back velocity:", robot.leftBack.getVelocity());
