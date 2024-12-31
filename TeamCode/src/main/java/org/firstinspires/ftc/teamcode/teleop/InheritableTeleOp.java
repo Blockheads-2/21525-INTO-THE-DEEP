@@ -28,7 +28,7 @@ public abstract class InheritableTeleOp extends OpMode {
     protected Telemetry dashboardTelemetry;
     protected ElapsedTime time = new ElapsedTime();
     protected double drivePower = 0.75;
-    private CLAW_STATES clawState = CLAW_STATES.CLOSED;
+    private CLAW_STATES clawState = CLAW_STATES.OPEN;
     private OUTTAKE_PIVOT_STATES outtakePivotState = OUTTAKE_PIVOT_STATES.REST;
     private LIFT_STATES liftState = LIFT_STATES.BOTTOM;
     private EXTENSION_STATES extensionState = EXTENSION_STATES.IN;
@@ -41,8 +41,9 @@ public abstract class InheritableTeleOp extends OpMode {
         dashboardTelemetry = dashboard.getTelemetry();
 
         robot.leftExtension.setDirection(Servo.Direction.REVERSE);
-        robot.leftPivot.setDirection(Servo.Direction.REVERSE);
-        robot.leftOuttakePivot.setDirection(Servo.Direction.REVERSE);
+        robot.rightPivot.setDirection(Servo.Direction.REVERSE);
+        robot.rightOuttakePivot.setDirection(Servo.Direction.REVERSE);
+        robot.claw.setDirection(Servo.Direction.REVERSE);
     }
 
     public void loop() {
@@ -153,7 +154,7 @@ public abstract class InheritableTeleOp extends OpMode {
     }
 
     protected void extension() {
-        if (dUp.is(Button.States.HELD) && robot.leftExtension.getPosition() < 0.45) {
+        if (dUp.is(Button.States.HELD) && robot.leftExtension.getPosition() < 0.5) {
             robot.leftExtension.setPosition(robot.leftExtension.getPosition() + 0.01);
             robot.rightExtension.setPosition(robot.rightExtension.getPosition() + 0.01);
         }
@@ -166,20 +167,20 @@ public abstract class InheritableTeleOp extends OpMode {
     protected void pivot() {
         if (b.is(Button.States.TAP)) {
             if (pivotState == PIVOT_STATES.DEPOSIT) {
-                robot.leftPivot.setPosition(0.25);
-                robot.rightPivot.setPosition(0.25);
+                robot.leftPivot.setPosition(0.5);
+                robot.rightPivot.setPosition(0.5);
                 pivotState = PIVOT_STATES.HOLD;
             } else if (pivotState == PIVOT_STATES.HOLD) {
-                robot.leftPivot.setPosition(0.7);
-                robot.rightPivot.setPosition(0.7);
+                robot.leftPivot.setPosition(0.6);
+                robot.rightPivot.setPosition(0.6);
                 pivotState = PIVOT_STATES.COLLECT;
             } else if (pivotState == PIVOT_STATES.COLLECT) {
-                robot.leftPivot.setPosition(0.25);
-                robot.rightPivot.setPosition(0.25);
+                robot.leftPivot.setPosition(0.5);
+                robot.rightPivot.setPosition(0.5);
                 pivotState = PIVOT_STATES.REVERSE_HOLD;
             } else if (pivotState == PIVOT_STATES.REVERSE_HOLD) {
-                robot.leftPivot.setPosition(0);
-                robot.rightPivot.setPosition(0);
+                robot.leftPivot.setPosition(0.4);
+                robot.rightPivot.setPosition(0.4);
                 pivotState = PIVOT_STATES.DEPOSIT;
             }
         }
@@ -189,8 +190,8 @@ public abstract class InheritableTeleOp extends OpMode {
     public void outtakePivot() {
         if (x.is(Button.States.TAP)) {
             if (outtakePivotState == OUTTAKE_PIVOT_STATES.REST) {
-                robot.leftOuttakePivot.setPosition(0.6);
-                robot.rightOuttakePivot.setPosition(0.6);
+                robot.leftOuttakePivot.setPosition(0.5);
+                robot.rightOuttakePivot.setPosition(0.5);
                 outtakePivotState = OUTTAKE_PIVOT_STATES.DEPOSIT;
             } else if (outtakePivotState == OUTTAKE_PIVOT_STATES.DEPOSIT) {
                 robot.leftOuttakePivot.setPosition(0);
@@ -274,6 +275,18 @@ public abstract class InheritableTeleOp extends OpMode {
                 robot.rightLift.setPower(0.25);
 
                 liftState = LIFT_STATES.MIDDLE;
+            }
+        }
+    }
+
+    protected void claw() {
+        if (a.is(Button.States.TAP)) {
+            if (clawState == CLAW_STATES.OPEN) {
+                robot.claw.setPosition(0.2);
+                clawState = CLAW_STATES.CLOSED;
+            } else if (clawState == CLAW_STATES.CLOSED) {
+                robot.claw.setPosition(0);
+                clawState = CLAW_STATES.OPEN;
             }
         }
     }

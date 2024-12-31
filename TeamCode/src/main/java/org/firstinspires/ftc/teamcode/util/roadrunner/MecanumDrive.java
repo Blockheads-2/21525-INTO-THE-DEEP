@@ -77,7 +77,7 @@ public final class MecanumDrive {
             new ProfileAccelConstraint(PARAMS.minProfileAccel, PARAMS.maxProfileAccel);
     public final DcMotorEx leftFront, leftBack, leftLift, rightBack, rightFront, rightLift;
     public final VoltageSensor voltageSensor;
-    public final Servo leftExtension, rightExtension, leftPivot, rightPivot, leftOuttakePivot, rightOuttakePivot;
+    public final Servo leftExtension, rightExtension, leftPivot, rightPivot, leftOuttakePivot, rightOuttakePivot, claw;
     public final CRServo intake;
     public final LazyImu lazyImu;
     public final Localizer localizer;
@@ -111,6 +111,7 @@ public final class MecanumDrive {
         rightPivot = hardwareMap.get(Servo.class, "rightPivot");
         leftOuttakePivot = hardwareMap.get(Servo.class, "leftOuttakePivot");
         rightOuttakePivot = hardwareMap.get(Servo.class, "rightOuttakePivot");
+        claw = hardwareMap.get(Servo.class, "claw");
 
         intake = hardwareMap.get(CRServo.class, "intake");
 
@@ -123,7 +124,7 @@ public final class MecanumDrive {
         // TODO: reverse motor directions if needed
         leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
         leftBack.setDirection(DcMotorSimple.Direction.REVERSE);
-        leftLift.setDirection(DcMotorSimple.Direction.REVERSE);
+        rightLift.setDirection(DcMotorSimple.Direction.REVERSE);
 
         //   see https://ftc-docs.firstinspires.org/en/latest/hardware_and_software_configuration/configuring/index.html
         lazyImu = new LazyImu(hardwareMap, "imu", new RevHubOrientationOnRobot(
