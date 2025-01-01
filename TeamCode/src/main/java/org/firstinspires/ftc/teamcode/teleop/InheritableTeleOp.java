@@ -184,7 +184,6 @@ public abstract class InheritableTeleOp extends OpMode {
                 pivotState = PIVOT_STATES.DEPOSIT;
             }
         }
-        dashboardTelemetry.addData("b", b.getState());
     }
 
     public void outtakePivot() {
