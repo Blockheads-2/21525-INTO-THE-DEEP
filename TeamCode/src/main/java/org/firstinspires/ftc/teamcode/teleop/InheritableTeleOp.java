@@ -171,19 +171,21 @@ public abstract class InheritableTeleOp extends OpMode {
                 robot.rightPivot.setPosition(0.5);
                 pivotState = PIVOT_STATES.HOLD;
             } else if (pivotState == PIVOT_STATES.HOLD) {
-                robot.leftPivot.setPosition(0.6);
-                robot.rightPivot.setPosition(0.6);
+                robot.leftPivot.setPosition(0.79);
+                robot.rightPivot.setPosition(0.79);
                 pivotState = PIVOT_STATES.COLLECT;
             } else if (pivotState == PIVOT_STATES.COLLECT) {
                 robot.leftPivot.setPosition(0.5);
                 robot.rightPivot.setPosition(0.5);
                 pivotState = PIVOT_STATES.REVERSE_HOLD;
             } else if (pivotState == PIVOT_STATES.REVERSE_HOLD) {
-                robot.leftPivot.setPosition(0.4);
-                robot.rightPivot.setPosition(0.4);
+                robot.leftPivot.setPosition(0.3);
+                robot.rightPivot.setPosition(0.3);
                 pivotState = PIVOT_STATES.DEPOSIT;
             }
         }
+
+        telemetry.addData("state: ", pivotState);
     }
 
     public void outtakePivot() {
