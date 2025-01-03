@@ -246,17 +246,21 @@ public abstract class InheritableTeleOp extends OpMode {
 
             dashboardTelemetry.addData("lift power", liftPower);
         } else {
-            double error = targetPosition - leftLiftCurrentPosition;
-            integralSum += error;
-            double derivative = error - lastError;
-
-            double pidPower = (Constants.Lift.Kp * error) + (Constants.Lift.Ki * integralSum) + (Constants.Lift.Kd * derivative);
-
-            robot.leftLift.setPower(pidPower);
-            robot.rightLift.setPower(pidPower);
-
-            lastError = error;
+            robot.leftLift.setPower(0.2);
+            robot.rightLift.setPower(0.2);
         }
+//        else {
+//            double error = targetPosition - leftLiftCurrentPosition;
+//            integralSum += error;
+//            double derivative = error - lastError;
+//
+//            double pidPower = (Constants.Lift.Kp * error) + (Constants.Lift.Ki * integralSum) + (Constants.Lift.Kd * derivative);
+//
+//            robot.leftLift.setPower(pidPower);
+//            robot.rightLift.setPower(pidPower);
+//
+//            lastError = error;
+//        }
         dashboardTelemetry.addData("left lift position:", robot.leftLift.getCurrentPosition());
         dashboardTelemetry.addData("right lift position:", robot.rightLift.getCurrentPosition());
         dashboardTelemetry.addData("y", y);
