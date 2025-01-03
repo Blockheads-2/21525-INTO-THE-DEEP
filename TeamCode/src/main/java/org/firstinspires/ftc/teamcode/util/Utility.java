@@ -10,14 +10,12 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 public class Utility {
     private static double integralSum = 0;
     private static double lastError = 0;
-    protected static double control(double reference, double state, ElapsedTime time) {
+    public static double control(double reference, double state) {
         double error = reference - state;
-        double derivative = (error - lastError) / time.seconds();
-        integralSum += error * time.seconds();
+        double derivative = (error - lastError);
+        integralSum += error;
 
         lastError = error;
-
-        time.reset();
 
         return ((error * Kp) + (derivative * Kd) + (integralSum * Ki));
     }

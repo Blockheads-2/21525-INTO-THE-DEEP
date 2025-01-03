@@ -1,5 +1,9 @@
 package org.firstinspires.ftc.teamcode.teleop;
 
+import static com.qualcomm.robotcore.hardware.Servo.MAX_POSITION;
+
+import static org.firstinspires.ftc.teamcode.util.Utility.control;
+
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -34,6 +38,10 @@ public abstract class InheritableTeleOp extends OpMode {
     private EXTENSION_STATES extensionState = EXTENSION_STATES.IN;
     private PIVOT_STATES pivotState = PIVOT_STATES.DEPOSIT;
 
+    private double targetPosition = 0;
+    private double integralSum = 0;
+    private double lastError = 0;
+
     @Override
     public void init() {
         robot = new MecanumDrive(hardwareMap, new Pose2d(0, 0, 0));
@@ -44,6 +52,12 @@ public abstract class InheritableTeleOp extends OpMode {
         robot.rightPivot.setDirection(Servo.Direction.REVERSE);
         robot.rightOuttakePivot.setDirection(Servo.Direction.REVERSE);
         robot.claw.setDirection(Servo.Direction.REVERSE);
+
+        robot.leftLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.rightLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        robot.leftLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.rightLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
     public void loop() {
@@ -191,8 +205,8 @@ public abstract class InheritableTeleOp extends OpMode {
     public void outtakePivot() {
         if (x.is(Button.States.TAP)) {
             if (outtakePivotState == OUTTAKE_PIVOT_STATES.REST) {
-                robot.leftOuttakePivot.setPosition(0.5);
-                robot.rightOuttakePivot.setPosition(0.5);
+                robot.leftOuttakePivot.setPosition(0.525);
+                robot.rightOuttakePivot.setPosition(0.525);
                 outtakePivotState = OUTTAKE_PIVOT_STATES.DEPOSIT;
             } else if (outtakePivotState == OUTTAKE_PIVOT_STATES.DEPOSIT) {
                 robot.leftOuttakePivot.setPosition(0);
@@ -211,73 +225,39 @@ public abstract class InheritableTeleOp extends OpMode {
     }
 
     protected void lift() {
-        if (rightStickUp.is(Button.States.TAP)) {
-            if (liftState == LIFT_STATES.MIDDLE) {
-                robot.leftLift.setTargetPosition((int) Constants.Lift.TOP);
-                robot.rightLift.setTargetPosition((int) Constants.Lift.TOP);
-                robot.leftLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                robot.rightLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                robot.leftLift.setPower(0.75);
-                robot.rightLift.setPower(0.75);
-                liftState = LIFT_STATES.TOP;
+        double y = gamepad2.right_stick_y;
+        double leftLiftCurrentPosition = robot.leftLift.getCurrentPosition();
+        double rightLiftCurrentPosition = robot.rightLift.getCurrentPosition();
+
+        if (Math.abs(y) > 0.05) {
+            targetPosition = leftLiftCurrentPosition;
+            double liftPower = y;
+
+            if ((leftLiftCurrentPosition >= Constants.Lift.BOTTOM && liftPower > 0) ||
+                    (leftLiftCurrentPosition <= Constants.Lift.TOP && liftPower < 0)) {
+                liftPower = 0;
             }
-            if (liftState == LIFT_STATES.LOW) {
-                robot.leftLift.setTargetPosition((int) Constants.Lift.MIDDLE);
-                robot.rightLift.setTargetPosition((int) Constants.Lift.MIDDLE);
-                robot.leftLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                robot.rightLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                robot.leftLift.setPower(0.75);
-                robot.rightLift.setPower(0.75);
-                liftState = LIFT_STATES.MIDDLE;
-            }
-            if (liftState == LIFT_STATES.BOTTOM) {
-                robot.leftLift.setTargetPosition((int) Constants.Lift.LOW);
-                robot.rightLift.setTargetPosition((int) Constants.Lift.LOW);
-                robot.leftLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                robot.rightLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                robot.leftLift.setPower(0.75);
-                robot.rightLift.setPower(0.75);
-                liftState = LIFT_STATES.LOW;
-            }
+
+            robot.leftLift.setPower(liftPower);
+            robot.rightLift.setPower(liftPower);
+            integralSum = 0;
+
+            dashboardTelemetry.addData("lift power", liftPower);
+        } else {
+            double error = targetPosition - leftLiftCurrentPosition;
+            integralSum += error;
+            double derivative = error - lastError;
+
+            double pidPower = (Constants.Lift.Kp * error) + (Constants.Lift.Ki * integralSum) + (Constants.Lift.Kd * derivative);
+
+            robot.leftLift.setPower(pidPower);
+            robot.rightLift.setPower(pidPower);
+
+            lastError = error;
         }
-        if (rightStickDown.is(Button.States.TAP)) {
-            if (liftState == LIFT_STATES.LOW) {
-                robot.leftLift.setTargetPosition((int) Constants.Lift.BOTTOM);
-                robot.rightLift.setTargetPosition((int) Constants.Lift.BOTTOM);
-
-                robot.leftLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                robot.rightLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-                robot.leftLift.setPower(0.25);
-                robot.rightLift.setPower(0.25);
-
-                liftState = LIFT_STATES.BOTTOM;
-            }
-            if (liftState == LIFT_STATES.MIDDLE) {
-                robot.leftLift.setTargetPosition((int) Constants.Lift.LOW);
-                robot.rightLift.setTargetPosition((int) Constants.Lift.LOW);
-
-                robot.leftLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                robot.rightLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-                robot.leftLift.setPower(0.25);
-                robot.rightLift.setPower(0.25);
-
-                liftState = LIFT_STATES.LOW;
-            }
-            if (liftState == LIFT_STATES.TOP) {
-                robot.leftLift.setTargetPosition((int) Constants.Lift.MIDDLE);
-                robot.rightLift.setTargetPosition((int) Constants.Lift.MIDDLE);
-
-                robot.leftLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                robot.rightLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-                robot.leftLift.setPower(0.25);
-                robot.rightLift.setPower(0.25);
-
-                liftState = LIFT_STATES.MIDDLE;
-            }
-        }
+        dashboardTelemetry.addData("left lift position:", robot.leftLift.getCurrentPosition());
+        dashboardTelemetry.addData("right lift position:", robot.rightLift.getCurrentPosition());
+        dashboardTelemetry.addData("y", y);
     }
 
     protected void claw() {

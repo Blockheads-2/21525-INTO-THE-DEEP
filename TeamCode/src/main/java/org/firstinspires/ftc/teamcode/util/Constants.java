@@ -8,19 +8,17 @@ public class Constants {
 
 
     public static class Lift {
-        public static double Kp = 0;
-        public static double Ki = 0;
-        public static double Kd = 0;
+        public static double Kp = 0.01;
+        public static double Ki = 0.0001;
+        public static double Kd = 0.005;
 
         /** MILLIMETERS */
         public static double STRING_LENGTH = 231.0;
         public static double NECESSARY_REVOLUTIONS = 2.0625;
         public static double COMPLETE_REVOLUTION_COUNTS = 1109.00625;
 
-        public static double TOP = 900;
-        public static double MIDDLE = 554.503125;
-        public static double LOW = 150;
-        public static double BOTTOM = 50;
+        public static double TOP = -1300;
+        public static double BOTTOM = 0;
 
         public static double UPPER_EXTENSION_BOUND = 0;
         public static double LOWER_EXTENSION_BOUND = 0.5;
