@@ -8,9 +8,9 @@ public class Constants {
 
 
     public static class Lift {
-        public static double Kp = 0.01;
+        public static double Kp = 0.005;
         public static double Ki = 0.0001;
-        public static double Kd = 0.005;
+        public static double Kd = 0.1;
 
         /** MILLIMETERS */
         public static double STRING_LENGTH = 231.0;

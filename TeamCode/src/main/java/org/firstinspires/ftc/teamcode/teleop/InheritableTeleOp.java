@@ -234,7 +234,9 @@ public abstract class InheritableTeleOp extends OpMode {
             double liftPower = y;
 
             if ((leftLiftCurrentPosition >= Constants.Lift.BOTTOM && liftPower > 0) ||
-                    (leftLiftCurrentPosition <= Constants.Lift.TOP && liftPower < 0)) {
+                    (leftLiftCurrentPosition <= Constants.Lift.TOP && liftPower < 0) ||
+                    (rightLiftCurrentPosition >= Constants.Lift.BOTTOM && liftPower > 0) ||
+                    (rightLiftCurrentPosition <= Constants.Lift.TOP && liftPower < 0)) {
                 liftPower = 0;
             }
 
