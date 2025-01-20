@@ -32,7 +32,7 @@ public abstract class InheritableTeleOp extends OpMode {
     protected Telemetry dashboardTelemetry;
     protected ElapsedTime time = new ElapsedTime();
     protected double drivePower = 0.75;
-    private CLAW_STATES clawState = CLAW_STATES.OPEN;
+    private CLAW_STATES clawState = CLAW_STATES.CLOSED;
     private OUTTAKE_PIVOT_STATES outtakePivotState = OUTTAKE_PIVOT_STATES.REST;
     private LIFT_STATES liftState = LIFT_STATES.BOTTOM;
     private EXTENSION_STATES extensionState = EXTENSION_STATES.IN;
@@ -51,7 +51,6 @@ public abstract class InheritableTeleOp extends OpMode {
         robot.leftExtension.setDirection(Servo.Direction.REVERSE);
         robot.rightPivot.setDirection(Servo.Direction.REVERSE);
         robot.rightOuttakePivot.setDirection(Servo.Direction.REVERSE);
-        robot.claw.setDirection(Servo.Direction.REVERSE);
 
         robot.leftLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.rightLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -141,9 +140,9 @@ public abstract class InheritableTeleOp extends OpMode {
     }
 
     protected void powerModifier() {
-        if (gamepad1.right_bumper) drivePower = 0.25;
-        else if (gamepad1.right_trigger > 0.25) drivePower = 1;
-        else drivePower = 0.75;
+        if (gamepad1.right_bumper) drivePower = 0.75;
+        else if (gamepad1.right_trigger > 0.25) drivePower = 0.5;
+        else drivePower = 1;
     }
 
     protected void updateButtons() {
@@ -191,11 +190,7 @@ public abstract class InheritableTeleOp extends OpMode {
             } else if (pivotState == PIVOT_STATES.COLLECT) {
                 robot.leftPivot.setPosition(0.5);
                 robot.rightPivot.setPosition(0.5);
-                pivotState = PIVOT_STATES.REVERSE_HOLD;
-            } else if (pivotState == PIVOT_STATES.REVERSE_HOLD) {
-                robot.leftPivot.setPosition(0.3);
-                robot.rightPivot.setPosition(0.3);
-                pivotState = PIVOT_STATES.DEPOSIT;
+                pivotState = PIVOT_STATES.HOLD;
             }
         }
 
@@ -217,11 +212,9 @@ public abstract class InheritableTeleOp extends OpMode {
     }
 
     protected void intake() {
-        if (y.is(Button.States.HELD)) {
-            robot.intake.setPower(1);
-        } else {
-            robot.intake.setPower(0);
-        }
+        if (y.is(Button.States.HELD)) robot.intake.setPower(1);
+        else if (x.is(Button.States.HELD)) robot.intake.setPower(-1);
+        else robot.intake.setPower(0);
     }
 
     protected void lift() {
@@ -231,23 +224,26 @@ public abstract class InheritableTeleOp extends OpMode {
 
         if (Math.abs(y) > 0.05) {
             targetPosition = leftLiftCurrentPosition;
-            double liftPower = y;
+            double leftLiftPower = 0.75 * y;
+            double rightLiftPower = 0.75 * y;
 
-            if ((leftLiftCurrentPosition >= Constants.Lift.BOTTOM && liftPower > 0) ||
-                    (leftLiftCurrentPosition <= Constants.Lift.TOP && liftPower < 0) ||
-                    (rightLiftCurrentPosition >= Constants.Lift.BOTTOM && liftPower > 0) ||
-                    (rightLiftCurrentPosition <= Constants.Lift.TOP && liftPower < 0)) {
-                liftPower = 0;
+            if ((leftLiftCurrentPosition >= Constants.Lift.BOTTOM && leftLiftPower > 0) ||
+                    (leftLiftCurrentPosition <= Constants.Lift.TOP && leftLiftPower < 0)) {
+                leftLiftPower = 0;
             }
 
-            robot.leftLift.setPower(liftPower);
-            robot.rightLift.setPower(liftPower);
+            if ((rightLiftCurrentPosition >= Constants.Lift.BOTTOM && rightLiftPower > 0) ||
+                    (rightLiftCurrentPosition <= Constants.Lift.TOP && rightLiftPower < 0)) {
+                rightLiftPower = 0;
+            }
+
+            robot.leftLift.setPower(leftLiftPower);
+            robot.rightLift.setPower(rightLiftPower);
             integralSum = 0;
 
-            dashboardTelemetry.addData("lift power", liftPower);
         } else {
-            robot.leftLift.setPower(0.2);
-            robot.rightLift.setPower(0.2);
+            robot.leftLift.setPower(0.01);
+            robot.rightLift.setPower(0.01);
         }
 //        else {
 //            double error = targetPosition - leftLiftCurrentPosition;
@@ -268,12 +264,12 @@ public abstract class InheritableTeleOp extends OpMode {
 
     protected void claw() {
         if (a.is(Button.States.TAP)) {
-            if (clawState == CLAW_STATES.OPEN) {
+            if (clawState == CLAW_STATES.CLOSED) {
                 robot.claw.setPosition(0.2);
-                clawState = CLAW_STATES.CLOSED;
-            } else if (clawState == CLAW_STATES.CLOSED) {
-                robot.claw.setPosition(0);
                 clawState = CLAW_STATES.OPEN;
+            } else if (clawState == CLAW_STATES.OPEN) {
+                robot.claw.setPosition(0);
+                clawState = CLAW_STATES.CLOSED;
             }
         }
     }

@@ -17,8 +17,6 @@ public class BaseDrive extends InheritableTeleOp {
         robot.rightExtension.setPosition(0);
         robot.leftPivot.setPosition(0);
         robot.rightPivot.setPosition(0);
-        robot.leftOuttakePivot.setPosition(0);
-        robot.rightOuttakePivot.setPosition(0);
         robot.claw.setPosition(0);
     }
 
@@ -30,7 +28,6 @@ public class BaseDrive extends InheritableTeleOp {
         extension();
         pivot();
         intake();
-        outtakePivot();
         lift();
         claw();
 
