@@ -242,8 +242,8 @@ public abstract class InheritableTeleOp extends OpMode {
             integralSum = 0;
 
         } else {
-            robot.leftLift.setPower(0.0001);
-            robot.rightLift.setPower(0.0001);
+            robot.leftLift.setPower(0.01);
+            robot.rightLift.setPower(0.01);
         }
 //        else {
 //            double error = targetPosition - leftLiftCurrentPosition;
