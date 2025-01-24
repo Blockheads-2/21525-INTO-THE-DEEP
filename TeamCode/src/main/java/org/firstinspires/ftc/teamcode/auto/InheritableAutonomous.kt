@@ -54,14 +54,11 @@ class Extension(hardwareMap: HardwareMap) {
     }
 
     fun setExtension(position: Double): Action {
-        return object : Action {
-            override fun run(p: TelemetryPacket): Boolean {
-                leftExtension.position = position
-                rightExtension.position = position
+        return Action {
+            leftExtension.position = position
+            rightExtension.position = position
 
-                return false
-            }
-
+            false
         }
     }
 }
@@ -77,6 +74,30 @@ class Pivot(hardwareMap: HardwareMap) {
         leftPivot.position = 0.0;
         rightPivot.position = 0.0;
     }
+
+    fun rest(): Action {
+        return Action {
+            leftPivot.position = 0.0;
+            rightPivot.position = 0.0;
+            false
+        }
+    }
+
+    fun hold(): Action {
+        return Action {
+            leftPivot.position = 0.5;
+            rightPivot.position = 0.5;
+            false
+        }
+    }
+
+    fun collect(): Action {
+        return Action {
+            leftPivot.position = 0.79;
+            rightPivot.position = 0.79;
+            false
+        }
+    }
 }
 
 class Claw(hardwareMap: HardwareMap) {
@@ -88,22 +109,16 @@ class Claw(hardwareMap: HardwareMap) {
     }
 
     fun open(): Action {
-        return object : Action {
-            private var initialized = false
-            override fun run(p: TelemetryPacket): Boolean {
-                claw.position = 0.2;
-                return false
-            }
+        return Action {
+            claw.position = 0.2;
+            false
         }
     }
 
     fun close(): Action {
-        return object : Action {
-            private var initialized = false
-            override fun run(p: TelemetryPacket): Boolean {
-                claw.position = 0.0;
-                return false
-            }
+        return Action {
+            claw.position = 0.0;
+            false
         }
     }
 }
