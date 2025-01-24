@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx
 import com.qualcomm.robotcore.hardware.DcMotorSimple
 import com.qualcomm.robotcore.hardware.HardwareMap
 import com.qualcomm.robotcore.hardware.Servo
+import com.qualcomm.robotcore.util.ElapsedTime
 
 
 abstract class InheritableAutonomous : LinearOpMode() {
@@ -25,6 +26,19 @@ class Lift(hardwareMap: HardwareMap) {
         lift.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
         lift.direction = DcMotorSimple.Direction.FORWARD
     }
+
+    class LiftUp(position : Double) : Action {
+        private var initialized = false
+        override fun run(p: TelemetryPacket): Boolean {
+
+            return false
+        }
+    }
+    fun liftUp(position : Double): Action {
+        return LiftUp(position)
+    }
+
+
 }
 
 class Extension(hardwareMap: HardwareMap) {
@@ -37,6 +51,18 @@ class Extension(hardwareMap: HardwareMap) {
         leftExtension.direction = Servo.Direction.REVERSE
         leftExtension.position = 0.0;
         rightExtension.position = 0.0;
+    }
+
+    fun setExtension(position: Double): Action {
+        return object : Action {
+            override fun run(p: TelemetryPacket): Boolean {
+                leftExtension.position = position
+                rightExtension.position = position
+
+                return false
+            }
+
+        }
     }
 }
 
@@ -60,6 +86,26 @@ class Claw(hardwareMap: HardwareMap) {
         claw = hardwareMap.get(Servo::class.java, "claw")
         claw.position = 0.0;
     }
+
+    fun open(): Action {
+        return object : Action {
+            private var initialized = false
+            override fun run(p: TelemetryPacket): Boolean {
+                claw.position = 0.2;
+                return false
+            }
+        }
+    }
+
+    fun close(): Action {
+        return object : Action {
+            private var initialized = false
+            override fun run(p: TelemetryPacket): Boolean {
+                claw.position = 0.0;
+                return false
+            }
+        }
+    }
 }
 
 class Intake(hardwareMap : HardwareMap) {
@@ -67,6 +113,25 @@ class Intake(hardwareMap : HardwareMap) {
 
     init {
         intake = hardwareMap.get(CRServo::class.java, "intake")
+    }
 
+    fun roll(power: Double?, limit: Double): Action {
+        return object : Action {
+            private var initialized = false
+            private val timer = ElapsedTime()
+
+            override fun run(p: TelemetryPacket): Boolean {
+                if (!initialized) {
+                    timer.reset()
+                    initialized = true
+                }
+
+                val isFinished = timer.milliseconds() >= limit
+                intake.power = power ?: 1.0
+                if (isFinished) intake.power = 0.0;
+
+                return !isFinished
+            }
+        }
     }
 }
