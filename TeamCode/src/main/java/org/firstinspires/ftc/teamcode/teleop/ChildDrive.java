@@ -11,7 +11,7 @@ public class ChildDrive extends InheritableTeleOp {
 
     @Override
     public void loop() {
-        drive(0.4);
+        drive(0.75);
 
         dashboardTelemetry.addData("left front velocity:", robot.leftFront.getVelocity());
         dashboardTelemetry.addData("left back velocity:", robot.leftBack.getVelocity());
