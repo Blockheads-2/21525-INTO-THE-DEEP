@@ -28,10 +28,11 @@ class BaseDrive : InheritableTeleOp() {
         dashboardTelemetry.addData("left back velocity:", robot.leftBack.velocity)
         dashboardTelemetry.addData("right front velocity:", robot.rightFront.velocity)
         dashboardTelemetry.addData("right back velocity:", robot.rightBack.velocity)
+        dashboardTelemetry.addData("left front power:", robot.leftFront.power)
+        dashboardTelemetry.addData("left back power:", robot.leftBack.power)
+        dashboardTelemetry.addData("right front power:", robot.rightFront.power)
+        dashboardTelemetry.addData("right back power:", robot.rightBack.power)
         dashboardTelemetry.update()
-        telemetry.addData("up", gamepad1.left_stick_y)
-        telemetry.addData("side", gamepad1.left_stick_x)
-        telemetry.update()
     }
 
     override fun stop() {
